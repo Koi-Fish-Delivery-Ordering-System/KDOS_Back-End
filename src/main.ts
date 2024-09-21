@@ -6,31 +6,31 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const createDatabase = async () => {
   const master = new DataSource({
-      type: "mysql",
-      host: databaseConfig().mysql.host,
-      port: databaseConfig().mysql.port,
-      username: databaseConfig().mysql.username,
-      password: databaseConfig().mysql.password,
-  })
+    type: 'mysql',
+    host: databaseConfig().mysql.host,
+    port: databaseConfig().mysql.port,
+    username: databaseConfig().mysql.username,
+    password: databaseConfig().mysql.password,
+  });
 
-  const promises: Array<Promise<void>> = []
+  const promises: Array<Promise<void>> = [];
 
   promises.push(
-      (async () => {
-          const dataSource = await master.initialize()
-          await dataSource
-              .createQueryRunner()
-              .createDatabase(databaseConfig().mysql.schema, true)
-      })(),
-  )
+    (async () => {
+      const dataSource = await master.initialize();
+      await dataSource
+        .createQueryRunner()
+        .createDatabase(databaseConfig().mysql.schema, true);
+    })(),
+  );
 
-  await Promise.all(promises)
-}
+  await Promise.all(promises);
+};
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors()
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Koi Delivery Ordering System')
@@ -39,9 +39,8 @@ const bootstrap = async () => {
     //.addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('', app, document);
 
   await app.listen(process.env.PORT || 3000);
-}
+};
 createDatabase().then(() => bootstrap());
-
