@@ -14,7 +14,7 @@ import { ControllersModule } from './controllers';
     }),
 
     TypeOrmModule.forRoot({
-      type: "mysql",
+      type: 'mysql',
       host: databaseConfig().mysql.host,
       port: databaseConfig().mysql.port,
       username: databaseConfig().mysql.username,
@@ -23,15 +23,14 @@ import { ControllersModule } from './controllers';
       autoLoadEntities: true,
       synchronize: true,
       poolSize: 1000000,
-      timezone: "Z",
-      driver: require("mysql2"),
-      connectorPackage: "mysql2",
+      timezone: 'Z',
+      driver: require('mysql2'),
+      connectorPackage: 'mysql2',
     }),
 
-    ControllersModule
-
+    ControllersModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
