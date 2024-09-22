@@ -11,5 +11,12 @@ jobs:
       uses: actions/checkout@v2 
  
     - name: Run Docker compose command
+      env:
+        MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_SCHEMA: ${{ secrets.MYSQL_SCHEMA }}
+        MYSQL_HOST: ${{ vars.MYSQL_HOST }}
+        MYSQL_PORT: ${{ vars.MYSQL_PORT }}
+        PORT: ${{ vars.PORT }}
       run: docker compose up --build -d 
   
