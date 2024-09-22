@@ -1,7 +1,7 @@
 services:
   server:
     build:
-      context: .
+      context: ..
     image: koidos-server:latest
     container_name: main
     environment:
