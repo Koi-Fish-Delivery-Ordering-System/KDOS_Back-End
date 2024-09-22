@@ -14,6 +14,15 @@ export class UserEntity {
   @Column({ type: String, length: 50 })
   username: string;
 
+  @Column({ type: String, length: 255, unique: true })
+  email: string;
+
+  @Column({ type: String, length: 20, nullable: true })
+  phone_number: string;
+
+  @Column({ type: String, length: 255, nullable: true })
+  address: string;
+  
   @CreateDateColumn()
   createdAt: Date;
 
