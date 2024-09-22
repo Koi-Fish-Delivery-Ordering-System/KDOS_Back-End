@@ -1,0 +1,15 @@
+services:
+  server:
+    build:
+      context: ..
+    image: koidos-server:latest
+    container_name: main
+    environment:
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_SCHEMA: ${MYSQL_SCHEMA}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      PORT: ${PORT}
+    ports:
+      - 3001:3001
