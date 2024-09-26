@@ -1,5 +1,5 @@
-import { UserEntity as UserMySqlEntity } from "./user.entity";
+import { AccountEntity as AccountMySqlEntity } from "./account.entity"
 
 export {
-    UserMySqlEntity
+    AccountMySqlEntity
 }

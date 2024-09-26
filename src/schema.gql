@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccountEntity {
+  accountId: ID!
+  username: String!
+}
+
+type Query {
+  findOneAccount: AccountEntity!
+}

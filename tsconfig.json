@@ -16,6 +16,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@config": ["src/config"],
+      "@database": ["src/database"],
+      "@controllers": ["src/controllers"],
+      "@global": ["src/global"],
+      "@common" : ["src/common"]
+    },
+  },
 }
