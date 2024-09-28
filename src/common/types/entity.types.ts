@@ -10,3 +10,11 @@ export enum SystemRoles {
 registerEnumType(SystemRoles, {
     name: "SystemRoles",
 })
+export enum TransportType {
+    Road = "road",
+    Air = "air",
+}
+
+registerEnumType(TransportType, {
+    name: "TransportType",
+})
