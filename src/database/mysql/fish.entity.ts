@@ -5,7 +5,10 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    OneToOne,
 } from "typeorm"    
+
+import { OrderDetailEntity } from './orderDetail.entity';
 
 @ObjectType()
 @Entity("fish")
@@ -38,6 +41,8 @@ export class FishEntity {
     @UpdateDateColumn()
         updatedAt: Date
     
-
+    @Field(() => OrderDetailEntity) 
+    @OneToOne(() => OrderDetailEntity, orderDetail => orderDetail.fish)
+    orderDetails: OrderDetailEntity[];
         
 }

@@ -18,13 +18,13 @@ export class PricePlanEntity {
     @Column({ type: "varchar", length: 50 })
         name: string
 
-    @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        volume: string
+    @Field(() => Number)
+    @Column({ type: "float" })
+        volume: number
 
-    @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        quantity: string
+    @Field(() => Number)
+    @Column({ type: "int" })
+        quantity: number
 
     @Field(() => String)
     @Column({ type: "varchar", length: 50 })
