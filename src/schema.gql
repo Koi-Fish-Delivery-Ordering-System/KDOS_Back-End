@@ -4,9 +4,31 @@
 
 type AccountEntity {
   accountId: ID!
+  address: String!
+  createdAt: DateTime!
+  email: String!
+  password: String!
+  roles: [RoleEntity!]
+  updatedAt: DateTime!
   username: String!
+  verified: Boolean!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   findOneAccount: AccountEntity!
+}
+
+type RoleEntity {
+  accountId: ID!
+  accountRoles: AccountEntity!
+  createdAt: DateTime!
+  isDisabled: Boolean!
+  name: String!
+  roleId: ID!
+  updatedAt: DateTime!
 }
