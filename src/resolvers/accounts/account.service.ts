@@ -15,7 +15,7 @@ export class AccountsService {
         const { accountId } = input
 
         const exist  = await this.accountMySqlRepository.findOne({
-            where:{
+            where: {
                 accountId
             }
         })

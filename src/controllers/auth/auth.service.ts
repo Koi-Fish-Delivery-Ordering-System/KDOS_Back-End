@@ -35,11 +35,11 @@ export class AuthService {
         }
     }
 
-    async signIn (input: SignInInput) : Promise<void> {
+    async signIn (input: SignInInput) : Promise<Boolean> {
         const { username, password } = input
 
         const existAccount = await this.accountMySqlRepository.findOneBy({username})
-        
+
         if(!existAccount) {
             throw new NotFoundException("Account not found")
         }
@@ -49,5 +49,7 @@ export class AuthService {
         if (existAccount.verified === false) {
             throw new UnauthorizedException("Your account is not verified, please check the verification email sent")
         }
+        
+        return true
     }
 }
