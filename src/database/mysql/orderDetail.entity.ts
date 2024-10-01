@@ -16,16 +16,12 @@ import { FishEntity } from "./fish.entity"  // Add this import
 @Entity("orderDetail")
 export class OrderDetailEntity {
     @Field(() => ID)
-    @PrimaryColumn()
+    @PrimaryColumn({ type: "uuid", length: 36 })
     orderId: string;
 
     @Field(() => ID)
-    @Column({ type: "uuid", length: 36 })
+    @PrimaryColumn({ type: "uuid", length: 36 })
     fishId: string;
-
-    @Field(() => Number)
-    @Column({ type: "int" })
-    quantity: number;
     
     @Field(() => Number)
     @Column({ type: "float" })
