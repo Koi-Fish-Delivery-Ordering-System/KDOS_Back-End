@@ -7,6 +7,7 @@ type AccountEntity {
   address: String!
   createdAt: DateTime!
   email: String!
+  orders: [OrderEntity!]!
   password: String!
   roles: [RoleEntity!]
   updatedAt: DateTime!
@@ -14,10 +15,87 @@ type AccountEntity {
   verified: Boolean!
 }
 
+type AdditionalServiceEntity {
+  additionalServiceId: ID!
+  createdAt: String!
+  name: String!
+  orders: OrderAdditionalServiceEntity!
+  price: String!
+  updatedAt: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type FishHealthEntity {
+  apperance: String!
+  behavior: String!
+  chechUpNote: String!
+  checkedUpAt: DateTime!
+  color: String!
+  createdAt: DateTime!
+  fish: OrderFishEntity
+  fishHealthId: ID!
+  length: Float!
+  temperature: String!
+  waterQuality: String!
+  weight: Float!
+}
+
+type FishQualificationEntity {
+  createdAt: DateTime!
+  fileId: ID!
+  fish: OrderFishEntity!
+  fishId: ID!
+  fishQualificationId: ID!
+  issuedAt: DateTime!
+  issuedFrom: String!
+  name: String!
+  updatedAt: DateTime!
+  url: String
+}
+
+type OrderAdditionalServiceEntity {
+  additionalService: AdditionalServiceEntity
+  additionalServiceId: ID!
+  createdAt: DateTime!
+  order: OrderEntity
+  orderAdditionalServiceId: ID!
+  orderId: ID!
+  updatedAt: DateTime!
+}
+
+type OrderEntity {
+  account: AccountEntity!
+  accountId: ID!
+  createdAt: DateTime!
+  deliveryAddress: String!
+  orderId: ID!
+  orderedFish: OrderFishEntity!
+  recipientEmail: String!
+  recipientName: String!
+  recipientPhone: String!
+  selectedAdditionalService: [OrderAdditionalServiceEntity!]
+  transportService: TransportServiceEntity!
+  transportServiceId: ID!
+  updatedAt: DateTime!
+}
+
+type OrderFishEntity {
+  ageInMonth: Float!
+  createdAt: DateTime!
+  description: String
+  gender: String!
+  health: FishHealthEntity!
+  name: String!
+  order: OrderEntity!
+  orderFishId: ID!
+  qualifications: FishQualificationEntity
+  species: String!
+  updatedAt: DateTime!
+}
 
 type Query {
   findOneAccount: AccountEntity!
@@ -31,4 +109,17 @@ type RoleEntity {
   name: String!
   roleId: ID!
   updatedAt: DateTime!
+}
+
+type TransportServiceEntity {
+  createdAt: String!
+  description: String!
+  name: String!
+  orders: OrderEntity!
+  pricePerAmount: Float!
+  pricePerKg: Float!
+  pricePerKm: Float!
+  transportServiceId: ID!
+  type: String!
+  updatedAt: String!
 }

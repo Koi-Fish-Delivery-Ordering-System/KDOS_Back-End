@@ -1,0 +1,35 @@
+export type Metadata = {
+    assetId: string;
+    filename: string;
+};
+
+export type MinimalFile = {
+    filename: string;
+    fileBody: string | Buffer;
+};
+
+export type AnyFile = MinimalFile | Express.Multer.File;
+
+export const isMinimalFile = (value: unknown): value is MinimalFile => {
+    if (typeof value !== "object" || value === null) {
+        return false
+    }
+    if (!("filename" in value) || !("fileBody" in value)) {
+        return false
+    }
+    if (
+        typeof value.filename !== "string" ||
+        !(typeof value.fileBody === "string" || Buffer.isBuffer(value.fileBody))
+    ) {
+        return false
+    }
+    return true
+}
+
+export type Files = {
+    files: Array<Express.Multer.File>;
+};
+
+export type FilesData = Partial<{
+    rootFile: AnyFile;
+}>;

@@ -35,7 +35,7 @@ export class AuthService {
         }
     }
 
-    async signIn (input: SignInInput) : Promise<Boolean> {
+    async signIn (input: SignInInput) : Promise<boolean> {
         const { username, password } = input
 
         const existAccount = await this.accountMySqlRepository.findOneBy({username})

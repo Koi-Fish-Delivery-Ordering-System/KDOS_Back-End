@@ -8,7 +8,7 @@ import {
     UpdateDateColumn,
 } from "typeorm"
 import { RoleEntity } from "./role.entity"
-import { OrderEntity } from './order.entity';
+import { OrderEntity } from "./order.entity"
 
 //tạo bảng dưới dạng code
 // Object type, Field => GraphQL ko thêm thì vẫn tạo đc bảng nhưng graphQL ko hiểu => ko truy vấn được
@@ -52,7 +52,7 @@ export class AccountEntity {
         updatedAt: Date
 
     @Field(() => [RoleEntity], { nullable: true })
-    
+
     @OneToMany(
         () => RoleEntity,
         (role) => role.accountRoles,
@@ -61,5 +61,5 @@ export class AccountEntity {
 
     @Field(() => [OrderEntity])
     @OneToMany(() => OrderEntity, (order) => order.account)
-    orders: OrderEntity[];
+        orders: Array<OrderEntity>
 }

@@ -39,7 +39,7 @@ export class RoleEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
-    // Relations
+    // Relations 
     @Field(() => AccountEntity)
     @ManyToOne(
         () => AccountEntity,

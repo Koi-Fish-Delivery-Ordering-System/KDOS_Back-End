@@ -3,14 +3,17 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-    ManyToOne,
     JoinColumn,
-    OneToMany
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
 } from "typeorm"
+import { OrderFishEntity } from "./order_fish.entity"
 import { AccountEntity } from "./account.entity"
-import { OrderDetailEntity } from "./orderDetail.entity"
+import { TransportServiceEntity } from "./transport_service.entity"
+import { OrderAdditionalServiceEntity } from "./order_additional_service.entity"
+
 
 @ObjectType()
 @Entity("order")
@@ -24,20 +27,28 @@ export class OrderEntity {
         recipientName: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        deliveryAddress: string
+    @Column({ type: "varchar", length: 200 })
+        fromAddress: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        recipientPhone: string
+    @Column({ type: "varchar", length: 200 })
+        toAddress: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        recipientEmail: string
+    @Column({ type: "varchar", length: 12 })
+        reciverName: string
+
+    @Field(() => String)
+    @Column({ type: "varchar", length: 12 })
+        reciverPhone: string
 
     @Field(() => ID)
     @Column({ type: "uuid", length: 36 })
         accountId: string
+
+    @Field(() => ID)
+    @Column({ type: "uuid", length: 36 })
+        transportServiceId: string
 
     @Field(() => Date)
     @CreateDateColumn()
@@ -47,13 +58,26 @@ export class OrderEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
+    @Field(() => OrderFishEntity)
+    @OneToMany(() => OrderFishEntity, (fishes) => fishes.order)
+        orderedFish: OrderFishEntity
 
     @Field(() => AccountEntity)
     @ManyToOne(() => AccountEntity, (account) => account.orders)
     @JoinColumn({ name: "accountId" })
         account: AccountEntity
 
-    @Field(() => [OrderDetailEntity])
-    @OneToMany(() => OrderDetailEntity, orderDetail => orderDetail.order)
-    orderDetails: OrderDetailEntity[];
+    @Field(() => TransportServiceEntity)
+    @ManyToOne(() => TransportServiceEntity, (service) => service.orders)
+    @JoinColumn({ name: "transportServiceId" })
+        transportService: TransportServiceEntity
+
+    @Field(() => [OrderAdditionalServiceEntity], { nullable: true })
+    @OneToMany(
+        () => OrderAdditionalServiceEntity,
+        (orderAdditionalService) => orderAdditionalService.order,
+        { cascade: true }
+    )
+        selectedAdditionalService: Array<OrderAdditionalServiceEntity>
+
 }

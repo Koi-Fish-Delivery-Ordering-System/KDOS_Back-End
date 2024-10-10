@@ -9,10 +9,12 @@ import { AccountsService } from "./account.service"
 // })
 @Controller("api/accounts")
 export class AccountsController {
-    constructor(private readonly userService: AccountsService) { }
+    constructor(
+        private readonly userService: AccountsService
+    ) { }
 
-    @Post("/")
-    async create(@Body() user: string){
-        return ""
-    }
+    // @Post("/")
+    // async create(@Body() user: string){
+    //     return ""
+    // }
 }

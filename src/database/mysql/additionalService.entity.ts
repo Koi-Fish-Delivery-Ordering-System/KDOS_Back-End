@@ -3,9 +3,11 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm"
+import { OrderAdditionalServiceEntity } from "./order_additional_service.entity"
 
 @ObjectType()
 @Entity("additionalService")
@@ -19,7 +21,7 @@ export class AdditionalServiceEntity {
         name: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
+    @Column({ type: "float", default: 1 })
         price: string
 
     @Field(() => String)
@@ -29,6 +31,10 @@ export class AdditionalServiceEntity {
     @Field(() => String)
     @UpdateDateColumn()
         updatedAt: Date
+
+    @Field(() => OrderAdditionalServiceEntity)
+    @OneToMany(() => OrderAdditionalServiceEntity, (orderAdditionalService) => orderAdditionalService.additionalService, {})
+        orders : Array<OrderAdditionalServiceEntity>
 }
 
 

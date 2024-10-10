@@ -9,6 +9,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo"
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default"
 import { join } from "path"
 import { ResolversModule } from "./resolvers"
+import { pathsConfig } from "@config"
 
 
 @Module({
@@ -16,7 +17,7 @@ import { ResolversModule } from "./resolvers"
         ConfigModule.forRoot({
             isGlobal: true,
             expandVariables: true,
-            load: [databaseConfig],
+            load: [databaseConfig, pathsConfig],
         }),
         
         GraphQLModule.forRoot<ApolloDriverConfig>({

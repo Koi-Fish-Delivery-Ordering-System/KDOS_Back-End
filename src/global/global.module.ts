@@ -1,10 +1,7 @@
-import {
-    AccountMySqlEntity
-} from "@database"
 import { Global, Module } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
 import {
-    Sha256Service} from "./services"
+    Sha256Service,
+    StorageService} from "./services"
 
 
 @Global()
@@ -16,9 +13,11 @@ import {
     ],
     exports: [
         Sha256Service,
+        StorageService
     ],
     providers: [
         Sha256Service,
+        StorageService
     ], 
 })
 export class GlobalModule { }
