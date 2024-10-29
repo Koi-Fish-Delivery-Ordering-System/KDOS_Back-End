@@ -1,7 +1,7 @@
 import { AuthTokens } from "./auth.types"
 
 export interface AuthOutput<T> {
-    data?: T,
+    data: T,
     tokens?: AuthTokens
 }
 
@@ -36,7 +36,7 @@ export interface ParamsOnly<T> {
 }
 
 export interface OptionsOnly<T> {
-    options?: T
+    options: T
 }
 
 export interface ResultsWithMetadata<T, K> {

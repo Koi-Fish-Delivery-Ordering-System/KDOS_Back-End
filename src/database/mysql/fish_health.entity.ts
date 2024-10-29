@@ -1,4 +1,4 @@
-import { Field, Float, ID, ObjectType } from "@nestjs/graphql"
+import { Field, ID, ObjectType } from "@nestjs/graphql"
 import {
     Column,
     CreateDateColumn,
@@ -16,14 +16,6 @@ export class FishHealthEntity {
     @Field(() => ID)
     @PrimaryColumn("uuid")
         fishHealthId: string
-
-    @Field(() => Float)
-    @Column({ type: "float", default: 1 })
-        weight: number
-
-    @Field(() => Float)
-    @Column({ type: "float", default: 1 })
-        length: number
 
     @Field(() => String)
     @Column({ type: "varchar", length: 1000 })
@@ -46,7 +38,7 @@ export class FishHealthEntity {
         waterQuality: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 1000 })
+    @Column({ type: "varchar", length: 1000 , nullable: true })
         chechUpNote: string
 
     @Field(() => Date)

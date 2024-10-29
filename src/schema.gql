@@ -4,11 +4,13 @@
 
 type AccountEntity {
   accountId: ID!
-  address: String!
+  address: String
   createdAt: DateTime!
+  driver: DriverEntity
   email: String!
   orders: [OrderEntity!]!
   password: String!
+  phone: String!
   roles: [RoleEntity!]
   updatedAt: DateTime!
   username: String!
@@ -18,9 +20,12 @@ type AccountEntity {
 type AdditionalServiceEntity {
   additionalServiceId: ID!
   createdAt: String!
+  description: String!
+  forTransportType: String
+  isActive: Boolean!
   name: String!
   orders: OrderAdditionalServiceEntity!
-  price: String!
+  price: Float!
   updatedAt: String!
 }
 
@@ -28,6 +33,42 @@ type AdditionalServiceEntity {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type DriverEntity {
+  account: AccountEntity
+  createdAt: DateTime!
+  currentProvince: String!
+  driverId: ID!
+  routes: [RouteEntity!]!
+  status: String!
+  updatedAt: DateTime!
+}
+
+input FindAllTransportServiceInputData {
+  options: FindManySuitableTransportServiceInputOptions!
+}
+
+input FindManySuitableAdditionalServiceInputData {
+  transportType: String!
+}
+
+input FindManySuitableTransportServiceInputData {
+  fromProvince: String!
+  toProvince: String!
+}
+
+input FindManySuitableTransportServiceInputOptions {
+  skip: Int!
+  take: Int!
+}
+
+input FindOneUserOrderInputData {
+  params: FindOneUserOrderInputParams!
+}
+
+input FindOneUserOrderInputParams {
+  orderId: String!
+}
 
 type FishHealthEntity {
   apperance: String!
@@ -38,10 +79,8 @@ type FishHealthEntity {
   createdAt: DateTime!
   fish: OrderFishEntity
   fishHealthId: ID!
-  length: Float!
   temperature: String!
   waterQuality: String!
-  weight: Float!
 }
 
 type FishQualificationEntity {
@@ -50,11 +89,7 @@ type FishQualificationEntity {
   fish: OrderFishEntity!
   fishId: ID!
   fishQualificationId: ID!
-  issuedAt: DateTime!
-  issuedFrom: String!
-  name: String!
   updatedAt: DateTime!
-  url: String
 }
 
 type OrderAdditionalServiceEntity {
@@ -71,13 +106,19 @@ type OrderEntity {
   account: AccountEntity!
   accountId: ID!
   createdAt: DateTime!
-  deliveryAddress: String!
+  fromAddress: String!
+  isDeliveryAssigned: Boolean!
+  notes: String
   orderId: ID!
-  orderedFish: OrderFishEntity!
-  recipientEmail: String!
-  recipientName: String!
-  recipientPhone: String!
+  orderStatus: String!
+  orderedFish: OrderFishEntity
+  paymentMethod: String!
+  receiverName: String!
+  receiverPhone: String!
   selectedAdditionalService: [OrderAdditionalServiceEntity!]
+  servicePricingType: String!
+  toAddress: String!
+  totalPrice: Float!
   transportService: TransportServiceEntity!
   transportServiceId: ID!
   updatedAt: DateTime!
@@ -89,16 +130,25 @@ type OrderFishEntity {
   description: String
   gender: String!
   health: FishHealthEntity!
+  length: Float!
   name: String!
   order: OrderEntity!
   orderFishId: ID!
+  orderId: ID!
   qualifications: FishQualificationEntity
   species: String!
   updatedAt: DateTime!
+  weight: Float!
 }
 
 type Query {
+  findAllTransportService(data: FindAllTransportServiceInputData!): [TransportServiceEntity!]!
+  findManySuitableAdditionalService(data: FindManySuitableAdditionalServiceInputData!): [AdditionalServiceEntity!]!
+  findManySuitableTransportService(data: FindManySuitableTransportServiceInputData!): [TransportServiceEntity!]!
+  findManyUserOrder: [OrderEntity!]!
   findOneAccount: AccountEntity!
+  findOneUserOrder(data: FindOneUserOrderInputData!): [OrderEntity!]!
+  init: AccountEntity!
 }
 
 type RoleEntity {
@@ -111,9 +161,31 @@ type RoleEntity {
   updatedAt: DateTime!
 }
 
+type RouteEntity {
+  createdAt: DateTime!
+  deliveryStartDate: DateTime!
+  driver: DriverEntity!
+  driverId: ID!
+  routeStops: [RouteStopEntity!]!
+  status: String!
+  updatedAt: DateTime!
+}
+
+type RouteStopEntity {
+  createdAt: DateTime!
+  currentLocation: String!
+  lastUpdatedAt: DateTime!
+  orderId: ID!
+  route: RouteEntity!
+  routeId: ID!
+  status: String!
+  updatedAt: DateTime!
+}
+
 type TransportServiceEntity {
   createdAt: String!
   description: String!
+  isActive: Boolean!
   name: String!
   orders: OrderEntity!
   pricePerAmount: Float!

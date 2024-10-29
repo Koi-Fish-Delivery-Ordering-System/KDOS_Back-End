@@ -1,10 +1,11 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { AccountMySqlEntity } from "src/database"
+import { AccountMySqlEntity, RoleMySqlEntity } from "src/database"
 import { Repository } from "typeorm"
 import { SignInInput, SignUpInput } from "./auth.input"
 import { Sha256Service } from "@global"
 import { SignUpOutput } from "./auth.output"
+import { SystemRoles } from "@common"
 
 
 
@@ -13,43 +14,51 @@ export class AuthService {
     constructor(
         @InjectRepository(AccountMySqlEntity)
         private readonly accountMySqlRepository: Repository<AccountMySqlEntity>,
+        @InjectRepository(RoleMySqlEntity)
+        private readonly roleMySqlRepository: Repository<RoleMySqlEntity>,
         private readonly sha256Service: Sha256Service
     ) { }
 
-    async signUp (input: SignUpInput) : Promise<SignUpOutput> {
+    async signUp(input: SignUpInput): Promise<SignUpOutput> {
         const existEmail = await this.accountMySqlRepository.findOneBy({ email: input.email })
         if (existEmail) {
             throw new ConflictException("Email already existed")
         }
-        const existUsername = await this.accountMySqlRepository.findOneBy({username: input.username})
-        if(existUsername) {
+        const existUsername = await this.accountMySqlRepository.findOneBy({ username: input.username })
+        if (existUsername) {
             throw new ConflictException("Username already in use")
         }
 
         const hashedPassword = this.sha256Service.createHash(input.password)
         input.password = hashedPassword
-        await this.accountMySqlRepository.save(input)
 
+        const { accountId } = await this.accountMySqlRepository.save(input)
+
+        await this.roleMySqlRepository.save({
+            accountId,
+            name: SystemRoles.User
+        })
+        
         return {
-            message : "Your Account has been created, please check your email to complete verification"
+            message: "Your account has been created"
         }
     }
 
-    async signIn (input: SignInInput) : Promise<boolean> {
+    async signIn(input: SignInInput): Promise<AccountMySqlEntity> {
         const { username, password } = input
 
-        const existAccount = await this.accountMySqlRepository.findOneBy({username})
+        const existAccount = await this.accountMySqlRepository.findOneBy({ username })
 
-        if(!existAccount) {
+        if (!existAccount) {
             throw new NotFoundException("Account not found")
         }
 
         if (!this.sha256Service.verifyHash(password, existAccount.password))
             throw new UnauthorizedException("Invalid credentials.")
-        if (existAccount.verified === false) {
-            throw new UnauthorizedException("Your account is not verified, please check the verification email sent")
-        }
-        
-        return true
+        // if (existAccount.verified === false) {
+        //     throw new UnauthorizedException("Your account is not verified, please check the verification email sent")
+        // }
+
+        return existAccount
     }
 }

@@ -3,12 +3,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm"
 import { RoleEntity } from "./role.entity"
 import { OrderEntity } from "./order.entity"
+import { DriverMySqlEntity } from "."
 
 //tạo bảng dưới dạng code
 // Object type, Field => GraphQL ko thêm thì vẫn tạo đc bảng nhưng graphQL ko hiểu => ko truy vấn được
@@ -36,7 +39,11 @@ export class AccountEntity {
         email: string
 
     @Field(() => String)
-    @Column({ type: String, length: 255, nullable: true })
+    @Column({ type: String, length: 12, nullable: true })
+        phone: string
+
+    @Field(() => String, {nullable: true})
+    @Column({ type: String, length: 1000, nullable: true })
         address: string
 
     @Field(() => Boolean)
@@ -62,4 +69,14 @@ export class AccountEntity {
     @Field(() => [OrderEntity])
     @OneToMany(() => OrderEntity, (order) => order.account)
         orders: Array<OrderEntity>
+
+    @Field(() => DriverMySqlEntity, { nullable: true })
+    @OneToOne(
+        () => DriverMySqlEntity,
+        (driver) => driver.account,
+        { nullable: true, onDelete: "CASCADE" }
+    )
+    @JoinColumn({ name: "driverId" })
+        driver: DriverMySqlEntity
+
 }

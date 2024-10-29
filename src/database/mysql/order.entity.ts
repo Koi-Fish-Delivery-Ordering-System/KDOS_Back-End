@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Field, Float, ID, ObjectType } from "@nestjs/graphql"
 import {
     Column,
     CreateDateColumn,
@@ -13,6 +13,7 @@ import { OrderFishEntity } from "./order_fish.entity"
 import { AccountEntity } from "./account.entity"
 import { TransportServiceEntity } from "./transport_service.entity"
 import { OrderAdditionalServiceEntity } from "./order_additional_service.entity"
+import { OrderStatus, PaymentMethod, ServicePricingType } from "@common"
 
 
 @ObjectType()
@@ -23,10 +24,6 @@ export class OrderEntity {
         orderId: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 50 })
-        recipientName: string
-
-    @Field(() => String)
     @Column({ type: "varchar", length: 200 })
         fromAddress: string
 
@@ -35,12 +32,12 @@ export class OrderEntity {
         toAddress: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 12 })
-        reciverName: string
+    @Column({ type: "varchar", length: 50 , nullable: true })
+        receiverName: string
 
     @Field(() => String)
-    @Column({ type: "varchar", length: 12 })
-        reciverPhone: string
+    @Column({ type: "varchar", length: 12 , nullable: true })
+        receiverPhone: string
 
     @Field(() => ID)
     @Column({ type: "uuid", length: 36 })
@@ -50,6 +47,30 @@ export class OrderEntity {
     @Column({ type: "uuid", length: 36 })
         transportServiceId: string
 
+    @Field(() => Float)
+    @Column({ type: "float", default: 1 })
+        totalPrice: number
+
+    @Field(() => String, { nullable: true })
+    @Column({ type: "varchar", length: 2000, nullable: true })
+        notes: string
+
+    @Field(() => String)
+    @Column({ type: "enum", enum: PaymentMethod })
+        paymentMethod: PaymentMethod
+
+    @Field(() => String)
+    @Column({ type: "enum", enum: OrderStatus })
+        orderStatus: OrderStatus
+    
+    @Field(() => String)
+    @Column({ type: "enum", enum: ServicePricingType })
+        servicePricingType: ServicePricingType
+
+    @Field(() => Boolean)
+    @Column({ type: "boolean", default: false })
+        isDeliveryAssigned : boolean
+
     @Field(() => Date)
     @CreateDateColumn()
         createdAt: Date
@@ -58,12 +79,12 @@ export class OrderEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
-    @Field(() => OrderFishEntity)
-    @OneToMany(() => OrderFishEntity, (fishes) => fishes.order)
+    @Field(() => OrderFishEntity, { nullable: true })
+    @OneToMany(() => OrderFishEntity, (fishes) => fishes.order, { nullable: true })
         orderedFish: OrderFishEntity
 
     @Field(() => AccountEntity)
-    @ManyToOne(() => AccountEntity, (account) => account.orders)
+    @ManyToOne(() => AccountEntity, (account) => account.orders, {onDelete: "CASCADE"})
     @JoinColumn({ name: "accountId" })
         account: AccountEntity
 

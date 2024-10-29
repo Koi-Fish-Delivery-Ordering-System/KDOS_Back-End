@@ -33,12 +33,13 @@ const bootstrap = async () => {
     app.enableCors()
 
     const config = new DocumentBuilder()
+        .addBearerAuth()
         .setTitle("Koi Delivery Ordering System")
         .setDescription("APIs")
         .setVersion("1.0")
         .build()
     const document = SwaggerModule.createDocument(app, config)
-    
+
     SwaggerModule.setup("/", app, document, {
         swaggerOptions: { defaultModelsExpandDepth: -1 },
     })

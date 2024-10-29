@@ -8,9 +8,13 @@ import { FishQualificationEntity as FishQualificationMySqlEntity } from "./fish_
 import { TransportServiceEntity as TransportServiceMySqlEntity } from "./transport_service.entity"
 import { OrderAdditionalServiceEntity as OrderAdditionalServiceMySqlEntity } from "./order_additional_service.entity"
 import { AdditionalServiceEntity as AdditionalServiceMySqlEntity } from "./additionalService.entity"
+import { DriverEntity as DriverMySqlEntity } from "./driver.entity"
+import { RouteEntity as RouteMySqlEntity } from "./route.entity"
+import { RouteStopEntity as RouteStopMySqlEntity } from "./route_stop.entity"
 
 export {
     AccountMySqlEntity,
+    DriverMySqlEntity,
     RoleMySqlEntity,
     WarehouseMySqlEntity,
     OrderMySqlEntity,
@@ -19,5 +23,7 @@ export {
     FishQualificationMySqlEntity,
     TransportServiceMySqlEntity,
     OrderAdditionalServiceMySqlEntity,
-    AdditionalServiceMySqlEntity
+    AdditionalServiceMySqlEntity,
+    RouteMySqlEntity,
+    RouteStopMySqlEntity
 }

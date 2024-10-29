@@ -1,20 +1,43 @@
-import { Body, Controller, Post } from "@nestjs/common"
-import { ApiTags } from "@nestjs/swagger"
+import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common"
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger"
 import { AccountsService } from "./account.service"
+import { AddRoleInputData, RegisterDriverInputData, UpdateProfileInputData } from "./account.input"
+import { AccountId, JwtAuthGuard } from "../shared"
 
-@ApiTags("Users")
-// @ApiHeader({
-//     name: "Client-Id",
-//     description: "4e2fa8d7-1f75-4fad-b500-454a93c78935",
-// })
+@ApiTags("Accounts")
 @Controller("api/accounts")
 export class AccountsController {
     constructor(
-        private readonly userService: AccountsService
+        private readonly accountService: AccountsService
     ) { }
 
-    // @Post("/")
-    // async create(@Body() user: string){
-    //     return ""
-    // }
+    @Patch("update-profile")
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    async updateProfile(
+        @AccountId() accountId : string,
+        @Body() data: UpdateProfileInputData
+    ){
+        return await this.accountService.updateProfile({ accountId, data })
+    }
+
+    @Post("add-role")
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    async addRole(
+        @AccountId() accountId : string,
+        @Body() data: AddRoleInputData
+    ) {
+        return await this.accountService.addRole({ accountId, data })
+    }
+
+    @Post("register-drvier")
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    async registerDriver(
+        @AccountId() accountId : string,
+        @Body() data: RegisterDriverInputData
+    ) {
+        return await this.accountService.registerDriver({ accountId, data })
+    }
 }

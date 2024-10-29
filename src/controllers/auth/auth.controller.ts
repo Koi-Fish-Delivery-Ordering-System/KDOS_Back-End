@@ -1,7 +1,9 @@
-import { Body, Controller, Post } from "@nestjs/common"
+import { Body, Controller, Post, UseInterceptors } from "@nestjs/common"
 import { ApiTags } from "@nestjs/swagger"
 import { AuthService } from "./auth.service"
 import { SignInInput, SignUpInput } from "./auth.input"
+import { GenerateAuthTokensInterceptor } from "../shared/interceptors/generate-auth-tokens.interceptor"
+
 
 
 @ApiTags("Authentication")
@@ -12,6 +14,7 @@ export class AuthController {
     ) {}
 
     @Post("sign-in")
+    @UseInterceptors(GenerateAuthTokensInterceptor)
     async signIn(
         @Body() data: SignInInput
     ){

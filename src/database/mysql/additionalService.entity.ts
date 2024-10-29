@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Field, Float, ID, ObjectType } from "@nestjs/graphql"
 import {
     Column,
     CreateDateColumn,
@@ -8,6 +8,7 @@ import {
     UpdateDateColumn,
 } from "typeorm"
 import { OrderAdditionalServiceEntity } from "./order_additional_service.entity"
+import { TransportType } from "@common"
 
 @ObjectType()
 @Entity("additionalService")
@@ -19,10 +20,22 @@ export class AdditionalServiceEntity {
     @Field(() => String)
     @Column({ type: "varchar", length: 50 })
         name: string
-
+    
     @Field(() => String)
+    @Column({ type: "varchar", length: 1000 })
+        description: string
+
+    @Field(() => Float)
     @Column({ type: "float", default: 1 })
-        price: string
+        price: number
+
+    @Field(() => String, {nullable: true})
+    @Column({ type: "enum", enum: TransportType, nullable: true})
+        forTransportType: TransportType
+
+    @Field(() => Boolean)
+    @Column({ type: "boolean", default: true })
+        isActive : boolean
 
     @Field(() => String)
     @CreateDateColumn()

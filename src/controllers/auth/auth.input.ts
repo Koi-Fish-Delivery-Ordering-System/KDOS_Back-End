@@ -23,10 +23,7 @@ export class SignUpInput {
         username: string
 
     @IsNotEmpty()
-    @ApiProperty({ example: "Your First Name", description: "First Name" })
-        firstName: string
-  
-    @IsNotEmpty()
-    @ApiProperty({ example: "Your Last Name", description: "Last Name" })
-        lastName: string
+    @ApiProperty({example: "84903304720", description: "User's Phone Number"})
+        phone : string
+
 }

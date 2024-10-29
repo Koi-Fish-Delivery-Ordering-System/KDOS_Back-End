@@ -6,20 +6,14 @@ export class AuthTokens {
   @IsJWT()
   @Field(() => String)
       accessToken: string
-  @IsJWT()
-  @Field(() => String)
-      refreshToken: string
 }
 
 export enum TokenType {
   Access = "Access",
-  Refresh = "Refresh",
-  Verify = "Verify"
 }
 
 export enum AuthTokenType {
   Access = "Access",
-  Refresh = "Refresh",
 }
 
 export type Payload = {

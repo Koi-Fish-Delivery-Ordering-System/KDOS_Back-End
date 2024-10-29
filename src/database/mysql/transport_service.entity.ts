@@ -42,8 +42,8 @@ export class TransportServiceEntity {
         pricePerAmount: number
 
     @Field(() => Boolean)
-    @Column({ type: "boolean", default: false })
-        isDisabled : boolean
+    @Column({ type: "boolean", default: true })
+        isActive : boolean
 
     @Field(() => String)
     @CreateDateColumn()
