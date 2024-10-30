@@ -1,21 +1,23 @@
 import { RouteStatus } from "@common"
-import { Field, ID, ObjectType } from "@nestjs/graphql"
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import { RouteMySqlEntity } from "."
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm"
+import { OrderMySqlEntity, RouteMySqlEntity } from "."
 
 @ObjectType()
 @Entity("route_stop")
 export class RouteStopEntity {
-    @PrimaryGeneratedColumn("uuid")
+
+    @Field(() => ID)
+    @PrimaryColumn("uuid")
         routeStopId: string
 
     @Field(() => ID)
     @Column({ type: "varchar", length: 36 })
         routeId: string
 
-    @Field(() => ID)
-    @Column({ type: "varchar", length: 36 })
-        orderId: string
+    @Field(() => Int)
+    @Column({ type: "int", nullable: false})
+        position: number
 
     @Field(() => String)
     @Column({ type: "varchar", length: 1000 })
@@ -40,4 +42,9 @@ export class RouteStopEntity {
     @Field(() => RouteMySqlEntity)
     @ManyToOne(() => RouteMySqlEntity, (route) => route.routeStops, {onDelete: "CASCADE"})
         route : RouteMySqlEntity
+
+    @Field(() => OrderMySqlEntity)
+    @OneToOne(() => OrderMySqlEntity, (order) => order.atRouteStop, { nullable: true, cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "routeStopId" })
+        order : OrderMySqlEntity
 }

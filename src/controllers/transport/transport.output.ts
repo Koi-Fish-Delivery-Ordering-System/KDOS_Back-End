@@ -8,7 +8,7 @@ export class UpdateTransportServiceOutput implements Output{
     message: string
 }
 
-export class CreateTransportationOutput implements Output{
+export class CreateRouteOutput implements Output{
     message: string
 }
 

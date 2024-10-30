@@ -6,13 +6,20 @@ import {
 } from "fs"
 import {v4 as uuid4} from "uuid"
 import { makeDirectoryIfNotExisted } from "src/common/utils/base.utils"
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 
 const METADATA_FILE_NAME = "metadata.json"
 
 @Injectable()
 export class StorageService {
     constructor() {}
+
+    private async readFile(paths: string[], options?: BufferEncoding) {
+        return await fsPromises.readFile(
+            join(pathsConfig().storageDirectory, ...paths),
+            options,
+        )
+    }
 
     private async writeFile(paths: string[], data: string | Buffer) {
         const filePath = join(pathsConfig().storageDirectory, ...paths)
@@ -53,5 +60,14 @@ export class StorageService {
             [assetId, METADATA_FILE_NAME],
             JSON.stringify(metadata),
         )
+    }
+
+    public async getFilenameFromAssetId(assetId: string): Promise<string> {
+        const data = await this.readFile([assetId, "metadata.json"], "utf8")
+        if(!data){
+            throw new NotFoundException("File not found or has been deleted")
+        }
+        const { filename } = JSON.parse(data) as Metadata
+        return filename
     }
 }

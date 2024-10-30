@@ -27,7 +27,7 @@ export class OrderFishEntity {
     @Column({ type: "varchar", length: 36 })
         orderId: string
     
-    @Field(() => String)
+    @Field(() => String, {nullable: true})
     @Column({ type: "varchar", length: 50 })
         name: string
 
@@ -55,7 +55,7 @@ export class OrderFishEntity {
     @Column({ type: "varchar", length: 2000, nullable: true })
         description: string
 
-    @Field(() => FishQualificationEntity, { nullable: true })
+    @Field(() => [FishQualificationEntity], { nullable: true })
     @OneToMany(() => FishQualificationEntity, (qualification) => qualification.fish, { nullable: true })
         qualifications: Array<FishQualificationEntity>
 

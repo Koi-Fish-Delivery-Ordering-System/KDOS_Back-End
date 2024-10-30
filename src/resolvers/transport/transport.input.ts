@@ -1,4 +1,4 @@
-import { AuthInput, Input, OptionsOnly, TransportType } from "@common"
+import { AuthInput, Input, OptionsOnly, RouteStatus, TransportType } from "@common"
 import { Field, InputType, Int } from "@nestjs/graphql"
 
 @InputType()
@@ -41,4 +41,21 @@ export class FindManySuitableAdditionalServiceInputData {
 export class FindManySuitableAdditionalServiceInput implements AuthInput<FindManySuitableAdditionalServiceInputData> {
     accountId: string
     data: FindManySuitableAdditionalServiceInputData
+}
+
+@InputType()
+export class FindManyStatusRouteInputOptions {
+    @Field(() => String)
+        status : RouteStatus
+}
+
+@InputType()
+export class FindManyStatusRouteInputData implements OptionsOnly<FindManyStatusRouteInputOptions> {
+    @Field(() => FindManyStatusRouteInputOptions)
+        options: FindManyStatusRouteInputOptions
+}
+
+export class FindManyStatusRouteInput implements AuthInput<FindManyStatusRouteInputData> {
+    accountId: string
+    data: FindManyStatusRouteInputData
 }

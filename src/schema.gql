@@ -105,13 +105,13 @@ type OrderAdditionalServiceEntity {
 type OrderEntity {
   account: AccountEntity!
   accountId: ID!
+  atRouteStop: RouteStopEntity
   createdAt: DateTime!
   fromAddress: String!
-  isDeliveryAssigned: Boolean!
   notes: String
   orderId: ID!
   orderStatus: String!
-  orderedFish: OrderFishEntity
+  orderedFish: [OrderFishEntity!]
   paymentMethod: String!
   receiverName: String!
   receiverPhone: String!
@@ -131,11 +131,11 @@ type OrderFishEntity {
   gender: String!
   health: FishHealthEntity!
   length: Float!
-  name: String!
+  name: String
   order: OrderEntity!
   orderFishId: ID!
   orderId: ID!
-  qualifications: FishQualificationEntity
+  qualifications: [FishQualificationEntity!]
   species: String!
   updatedAt: DateTime!
   weight: Float!
@@ -166,7 +166,7 @@ type RouteEntity {
   deliveryStartDate: DateTime!
   driver: DriverEntity!
   driverId: ID!
-  routeStops: [RouteStopEntity!]!
+  routeStops: [RouteStopEntity!]
   status: String!
   updatedAt: DateTime!
 }
@@ -175,9 +175,11 @@ type RouteStopEntity {
   createdAt: DateTime!
   currentLocation: String!
   lastUpdatedAt: DateTime!
-  orderId: ID!
+  order: OrderEntity!
+  position: Int!
   route: RouteEntity!
   routeId: ID!
+  routeStopId: ID!
   status: String!
   updatedAt: DateTime!
 }

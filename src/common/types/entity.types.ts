@@ -60,7 +60,8 @@ registerEnumType(PaymentMethod, {
 })
 
 export enum OrderStatus {
-    Pending = "pending",
+    Processing = "processing",
+    PendingPickUp = "pendingPickUp",
     Delivering = "delivering",
     Delivered = "delivered"
 }

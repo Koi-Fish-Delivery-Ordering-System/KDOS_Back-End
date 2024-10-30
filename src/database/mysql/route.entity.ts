@@ -29,8 +29,8 @@ export class RouteEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
-    @Field(() => [RouteStopMySqlEntity])
-    @OneToMany(() => RouteStopMySqlEntity, (routeStops) => routeStops.route)
+    @Field(() => [RouteStopMySqlEntity], {nullable: true})
+    @OneToMany(() => RouteStopMySqlEntity, (routeStops) => routeStops.route, {nullable: true})
         routeStops : Array<RouteStopMySqlEntity>
 
     @Field(() => DriverMySqlEntity)

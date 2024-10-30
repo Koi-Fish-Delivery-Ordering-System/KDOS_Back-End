@@ -41,19 +41,6 @@ export class UpdateTransportServiceInput implements AuthInput<UpdateTransportSer
     data: UpdateTransportServiceInputData
 }
 
-export class CreateTransportationInputData {
-    @ApiProperty()
-        driverId: string
-    @ApiProperty()
-        pickUpAddress: string
-    @ApiProperty()
-        dropOffAddress: string
-}
-
-export class CreateTransportationInput implements AuthInput<CreateTransportationInputData> {
-    accountId: string
-    data: CreateTransportationInputData
-}
 
 export class CreateAdditionalServiceInputData {
     @ApiProperty()
@@ -127,4 +114,33 @@ export class PickUpDeliveryRouteInputData {
 export class PickUpDeliveryRouteInput implements AuthInput<PickUpDeliveryRouteInputData> {
     accountId: string
     data: PickUpDeliveryRouteInputData  
+}
+
+export class UpdateRouteInputData {
+    @ApiProperty()
+        routeId : string
+}
+
+export class UpdateRouteInput implements AuthInput<UpdateRouteInputData> {
+    accountId: string
+    data: UpdateRouteInputData
+}
+
+export class CreateRouteStopInputData {
+    @ApiProperty()
+        orderId : string
+    @ApiProperty()
+        position : number
+}
+
+export class CreateRouteInputData {
+    @ApiProperty()
+        driverId : string
+    @ApiProperty()
+        routeStops : Array<CreateRouteStopInputData>
+}
+
+export class CreateRouteInput implements AuthInput<CreateRouteInputData> {
+    accountId: string
+    data: CreateRouteInputData
 }

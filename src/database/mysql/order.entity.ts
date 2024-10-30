@@ -6,6 +6,7 @@ import {
     JoinColumn,
     ManyToOne,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm"
@@ -14,6 +15,7 @@ import { AccountEntity } from "./account.entity"
 import { TransportServiceEntity } from "./transport_service.entity"
 import { OrderAdditionalServiceEntity } from "./order_additional_service.entity"
 import { OrderStatus, PaymentMethod, ServicePricingType } from "@common"
+import { RouteStopMySqlEntity } from "."
 
 
 @ObjectType()
@@ -60,16 +62,12 @@ export class OrderEntity {
         paymentMethod: PaymentMethod
 
     @Field(() => String)
-    @Column({ type: "enum", enum: OrderStatus })
+    @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.Processing })
         orderStatus: OrderStatus
     
     @Field(() => String)
     @Column({ type: "enum", enum: ServicePricingType })
         servicePricingType: ServicePricingType
-
-    @Field(() => Boolean)
-    @Column({ type: "boolean", default: false })
-        isDeliveryAssigned : boolean
 
     @Field(() => Date)
     @CreateDateColumn()
@@ -79,9 +77,9 @@ export class OrderEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
-    @Field(() => OrderFishEntity, { nullable: true })
+    @Field(() => [OrderFishEntity], { nullable: true })
     @OneToMany(() => OrderFishEntity, (fishes) => fishes.order, { nullable: true })
-        orderedFish: OrderFishEntity
+        orderedFish: Array<OrderFishEntity>
 
     @Field(() => AccountEntity)
     @ManyToOne(() => AccountEntity, (account) => account.orders, {onDelete: "CASCADE"})
@@ -101,4 +99,8 @@ export class OrderEntity {
     )
         selectedAdditionalService: Array<OrderAdditionalServiceEntity>
 
+    @Field(() => RouteStopMySqlEntity, { nullable: true })
+    @OneToOne(() => RouteStopMySqlEntity, (atRouteStop) => atRouteStop.order, { nullable: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "routeStopId" })
+        atRouteStop : RouteStopMySqlEntity
 }

@@ -27,7 +27,7 @@ export const provinces = [
     { province: "Ninh Thuận" },
     { province: "Bình Thuận" },
     { province: "Bà Rịa - Vũng Tàu" },
-    { province: "TP. Hồ Chí Minh" },
+    { province: "Hồ Chí Minh" },
     { province: "Cần Thơ" },
     { province: "Kiên Giang" },
     { province: "Cà Mau" },

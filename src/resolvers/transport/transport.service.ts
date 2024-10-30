@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { AdditionalServiceMySqlEntity, TransportServiceMySqlEntity } from "@database"
+import { AdditionalServiceMySqlEntity, RouteMySqlEntity, TransportServiceMySqlEntity } from "@database"
 import { Repository } from "typeorm"
-import { FindAllTransportServiceInput, FindManySuitableAdditionalServiceInput, FindManySuitableTransportServiceInput } from "./transport.input"
+import { FindAllTransportServiceInput, FindManyStatusRouteInput, FindManySuitableAdditionalServiceInput, FindManySuitableTransportServiceInput } from "./transport.input"
 import { checkFlightRoute } from "src/common/utils/base.utils"
 import { TransportType } from "@common"
 
@@ -12,7 +12,9 @@ export class TransportService {
         @InjectRepository(TransportServiceMySqlEntity)
         private readonly transportMySqlRepository : Repository<TransportServiceMySqlEntity>,
         @InjectRepository(AdditionalServiceMySqlEntity)
-        private readonly additionalServiceMySqlRepository : Repository<AdditionalServiceMySqlEntity>
+        private readonly additionalServiceMySqlRepository : Repository<AdditionalServiceMySqlEntity>,
+        @InjectRepository(RouteMySqlEntity)
+        private readonly routeMySqlRepository : Repository<RouteMySqlEntity>
     ) {}
 
     async findManySuitableTransportService(input: FindManySuitableTransportServiceInput): Promise<Array<TransportServiceMySqlEntity>> {
@@ -58,6 +60,23 @@ export class TransportService {
             ]
         })
     
+        return results
+    }
+
+    async findManyStatusRoute(input: FindManyStatusRouteInput) : Promise<Array<RouteMySqlEntity>>{
+        const { data } = input
+        const { options } = data
+        const { status } = options
+
+        const results = await this.routeMySqlRepository.find({
+            where:{
+                status
+            },
+            order:{
+                createdAt: "DESC"
+            }
+        })
+
         return results
     }
 }

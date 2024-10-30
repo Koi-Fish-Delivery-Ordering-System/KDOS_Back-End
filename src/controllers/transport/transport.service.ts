@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
-import { CreateAdditionalServiceInput, CreateTransportationInput, CreateTransportServiceInput, ToggleAdditionalServiceInput, ToggleTransportServiceInput, UpdateAdditionalServiceInput, UpdateTransportServiceInput } from "./transport.input"
-import { AdditionalServiceMySqlEntity, TransportServiceMySqlEntity } from "@database"
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common"
+import { CreateAdditionalServiceInput, CreateRouteInput, CreateTransportServiceInput, PickUpDeliveryRouteInput, ToggleAdditionalServiceInput, ToggleTransportServiceInput, UpdateAdditionalServiceInput, UpdateTransportServiceInput } from "./transport.input"
+import { AdditionalServiceMySqlEntity, OrderMySqlEntity, RouteMySqlEntity, RouteStopMySqlEntity, TransportServiceMySqlEntity } from "@database"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
-import { CreateAdditionalServiceOutput, CreateTransportationOutput, CreateTransportOutput, ToggleAdditionalServiceOutput, ToggleTransportServiceOutput, UpdateAdditionalServiceOutput, UpdateTransportServiceOutput } from "./transport.output"
+import { Not, Repository } from "typeorm"
+import { CreateAdditionalServiceOutput, CreateRouteOutput, CreateTransportOutput, PickUpDeliveryRouteOutput, ToggleAdditionalServiceOutput, ToggleTransportServiceOutput, UpdateAdditionalServiceOutput, UpdateTransportServiceOutput } from "./transport.output"
+import { OrderStatus, RouteStatus } from "@common"
 
 
 @Injectable()
@@ -13,6 +14,12 @@ export class TransportService {
         private readonly transportServiceMySqlRepository: Repository<TransportServiceMySqlEntity>,
         @InjectRepository(AdditionalServiceMySqlEntity)
         private readonly additionalServiceMySqlRepository: Repository<AdditionalServiceMySqlEntity>,
+        @InjectRepository(RouteMySqlEntity)
+        private readonly routeMySqlRepository: Repository<RouteMySqlEntity>,
+        @InjectRepository(RouteStopMySqlEntity)
+        private readonly routeStopMySqlRepository: Repository<RouteStopMySqlEntity>,
+        @InjectRepository(OrderMySqlEntity)
+        private readonly orderMySqlRepository: Repository<OrderMySqlEntity>,
     ) { }
 
     async createTransportService(input: CreateTransportServiceInput): Promise<CreateTransportOutput> {
@@ -72,8 +79,31 @@ export class TransportService {
         }
     }
 
-    async createTransportation(input: CreateTransportationInput): Promise<CreateTransportationOutput> {
+    async createRoute(input: CreateRouteInput): Promise<CreateRouteOutput> {
         const { data } = input
+        const { driverId, routeStops } = data
+
+        await this.routeMySqlRepository.save({
+            driverId,
+        })
+
+        const promises: Array<Promise<void>> = []
+        for (const destination of routeStops) {
+            const { orderId, position } = destination
+            const promise = async () => {
+                const stop = await this.routeStopMySqlRepository.save({
+                    routeStopId: orderId,
+                    position
+                })
+    
+                await this.orderMySqlRepository.update(orderId, {
+                    orderStatus: OrderStatus.PendingPickUp,
+                    atRouteStop: stop
+                })
+            }
+            promises.push(promise())
+        }
+        await Promise.all(promises)
 
         return {
             message: "New Transportation has been created successfully"
@@ -110,7 +140,7 @@ export class TransportService {
         await this.additionalServiceMySqlRepository.update(additionalServiceId, addserv)
 
         return {
-            message: "New additional service has been created successfully"
+            message: "New additional service has been created successfully."
         }
     }
 
@@ -131,4 +161,30 @@ export class TransportService {
             message: `This additional service is ${found.isActive ? "activated" : "disabled"}`
         }
     }
+
+    async pickUpDeliveryRoute(input: PickUpDeliveryRouteInput): Promise<PickUpDeliveryRouteOutput> {
+        const { accountId, data } = input
+        const { routeId } = data
+
+        const processingRoutes = await this.routeMySqlRepository.find({
+            where: {
+                driverId: accountId,
+                status: Not(RouteStatus.Delivered)
+            }
+        })
+
+        if (processingRoutes) {
+            throw new ConflictException("You are currently taking 1 delivery route")
+        }
+
+        await this.routeMySqlRepository.update(routeId, {
+            status: RouteStatus.Delivering,
+            deliveryStartDate: new Date()
+        })
+
+        return {
+            message: "Delivery Route picked up!, pay attention"
+        }
+    }
+
 }

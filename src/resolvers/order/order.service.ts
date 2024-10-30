@@ -19,6 +19,13 @@ export class OrderService {
             where:{
                 accountId
             },
+            relations:{
+                account: true,
+                orderedFish: {
+                    health: true,
+                    qualifications: true
+                }
+            },
             order:{
                 createdAt: "DESC"
             }
@@ -42,10 +49,10 @@ export class OrderService {
         return result
     }
 
-    async findManyPendingOrder() : Promise<Array<OrderMySqlEntity>>{
+    async findManyProcessingOrder() : Promise<Array<OrderMySqlEntity>>{
         const results = await this.orderMySqlRepository.find({
             where:{
-                orderStatus: OrderStatus.Pending
+                orderStatus: OrderStatus.Processing
             }
         })
 
