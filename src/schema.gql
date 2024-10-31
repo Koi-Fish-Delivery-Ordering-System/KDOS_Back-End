@@ -58,8 +58,8 @@ input FindManySuitableTransportServiceInputData {
 }
 
 input FindManySuitableTransportServiceInputOptions {
-  skip: Int!
-  take: Int!
+  skip: Int
+  take: Int
 }
 
 input FindOneUserOrderInputData {
@@ -105,9 +105,9 @@ type OrderAdditionalServiceEntity {
 type OrderEntity {
   account: AccountEntity!
   accountId: ID!
-  atRouteStop: RouteStopEntity
   createdAt: DateTime!
   fromAddress: String!
+  fromProvince: String!
   notes: String
   orderId: ID!
   orderStatus: String!
@@ -115,9 +115,11 @@ type OrderEntity {
   paymentMethod: String!
   receiverName: String!
   receiverPhone: String!
+  routeStops: [RouteStopEntity!]
   selectedAdditionalService: [OrderAdditionalServiceEntity!]
   servicePricingType: String!
   toAddress: String!
+  toProvince: String!
   totalPrice: Float!
   transportService: TransportServiceEntity!
   transportServiceId: ID!
@@ -143,6 +145,7 @@ type OrderFishEntity {
 
 type Query {
   findAllTransportService(data: FindAllTransportServiceInputData!): [TransportServiceEntity!]!
+  findManyProcessingOrder: [OrderEntity!]!
   findManySuitableAdditionalService(data: FindManySuitableAdditionalServiceInputData!): [AdditionalServiceEntity!]!
   findManySuitableTransportService(data: FindManySuitableTransportServiceInputData!): [TransportServiceEntity!]!
   findManyUserOrder: [OrderEntity!]!
@@ -172,20 +175,20 @@ type RouteEntity {
 }
 
 type RouteStopEntity {
+  address: String!
   createdAt: DateTime!
-  currentLocation: String!
-  lastUpdatedAt: DateTime!
   order: OrderEntity!
-  position: Int!
+  orderId: ID!
   route: RouteEntity!
   routeId: ID!
   routeStopId: ID!
   status: String!
+  stopType: String!
   updatedAt: DateTime!
 }
 
 type TransportServiceEntity {
-  createdAt: String!
+  createdAt: DateTime!
   description: String!
   isActive: Boolean!
   name: String!
@@ -195,5 +198,5 @@ type TransportServiceEntity {
   pricePerKm: Float!
   transportServiceId: ID!
   type: String!
-  updatedAt: String!
+  updatedAt: DateTime!
 }

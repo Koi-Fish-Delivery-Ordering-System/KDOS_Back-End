@@ -17,6 +17,7 @@ export class TransportResolver {
     }
 
     @Query(() => [TransportServiceMySqlEntity])
+    @UseGuards(JwtAuthGuard)
     async findAllTransportService(
         @AccountId() accountId: string,
         @Args("data") data: FindAllTransportServiceInputData

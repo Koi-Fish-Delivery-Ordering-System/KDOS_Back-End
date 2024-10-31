@@ -32,7 +32,7 @@ export class TransportService {
 
     async findAllTransportService (input: FindAllTransportServiceInput) : Promise<Array<TransportServiceMySqlEntity>>{
         const { data } = input
-        const {options} = data
+        const { options } = data
         const { skip, take } = options
 
         const results = await this.transportMySqlRepository.find({
@@ -71,6 +71,12 @@ export class TransportService {
         const results = await this.routeMySqlRepository.find({
             where:{
                 status
+            },
+            relations:{
+                driver: true,
+                routeStops:{
+                    
+                }
             },
             order:{
                 createdAt: "DESC"

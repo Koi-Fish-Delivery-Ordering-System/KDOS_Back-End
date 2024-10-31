@@ -6,7 +6,6 @@ import {
     JoinColumn,
     ManyToOne,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm"
@@ -32,6 +31,14 @@ export class OrderEntity {
     @Field(() => String)
     @Column({ type: "varchar", length: 200 })
         toAddress: string
+
+    @Field(() => String)
+    @Column({ type: "varchar", length: 200 })
+        fromProvince: string
+
+    @Field(() => String)
+    @Column({ type: "varchar", length: 200 })
+        toProvince: string
 
     @Field(() => String)
     @Column({ type: "varchar", length: 50 , nullable: true })
@@ -99,8 +106,7 @@ export class OrderEntity {
     )
         selectedAdditionalService: Array<OrderAdditionalServiceEntity>
 
-    @Field(() => RouteStopMySqlEntity, { nullable: true })
-    @OneToOne(() => RouteStopMySqlEntity, (atRouteStop) => atRouteStop.order, { nullable: true, onDelete: "CASCADE" })
-    @JoinColumn({ name: "routeStopId" })
-        atRouteStop : RouteStopMySqlEntity
+    @Field(() => [RouteStopMySqlEntity], { nullable: true })
+    @OneToMany(() => RouteStopMySqlEntity, (routeStop) => routeStop.order, { nullable: true })
+        routeStops : Array<RouteStopMySqlEntity>
 }

@@ -1,10 +1,11 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common"
-import { CreateAdditionalServiceInput, CreateRouteInput, CreateTransportServiceInput, PickUpDeliveryRouteInput, ToggleAdditionalServiceInput, ToggleTransportServiceInput, UpdateAdditionalServiceInput, UpdateTransportServiceInput } from "./transport.input"
+import { CreateAdditionalServiceInput, CreateRouteInput, CreateTransportServiceInput, PickUpDeliveryRouteInput, ToggleAdditionalServiceInput, ToggleTransportServiceInput, UpdateAdditionalServiceInput, UpdateRouteStopStatusInput, UpdateTransportServiceInput } from "./transport.input"
 import { AdditionalServiceMySqlEntity, OrderMySqlEntity, RouteMySqlEntity, RouteStopMySqlEntity, TransportServiceMySqlEntity } from "@database"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Not, Repository } from "typeorm"
-import { CreateAdditionalServiceOutput, CreateRouteOutput, CreateTransportOutput, PickUpDeliveryRouteOutput, ToggleAdditionalServiceOutput, ToggleTransportServiceOutput, UpdateAdditionalServiceOutput, UpdateTransportServiceOutput } from "./transport.output"
-import { OrderStatus, RouteStatus } from "@common"
+import { CreateAdditionalServiceOutput, CreateRouteOutput, CreateTransportOutput, PickUpDeliveryRouteOutput, ToggleAdditionalServiceOutput, ToggleTransportServiceOutput, UpdateAdditionalServiceOutput, UpdateRouteStopStatusOutput, UpdateTransportServiceOutput } from "./transport.output"
+import { OrderStatus, RouteStatus, StopType, TransportType } from "@common"
+import { provinces } from "src/common/utils/base.utils"
 
 
 @Injectable()
@@ -83,27 +84,50 @@ export class TransportService {
         const { data } = input
         const { driverId, routeStops } = data
 
-        await this.routeMySqlRepository.save({
-            driverId,
-        })
+        const { routeId } = await this.routeMySqlRepository.save({ driverId })
 
-        const promises: Array<Promise<void>> = []
-        for (const destination of routeStops) {
-            const { orderId, position } = destination
-            const promise = async () => {
-                const stop = await this.routeStopMySqlRepository.save({
-                    routeStopId: orderId,
-                    position
-                })
-    
-                await this.orderMySqlRepository.update(orderId, {
-                    orderStatus: OrderStatus.PendingPickUp,
-                    atRouteStop: stop
+        const orderIds = routeStops.map(({orderId}) => orderId)
+
+        for (const { orderId } of routeStops) {
+
+            const order = await this.orderMySqlRepository.findOne({
+                where: { orderId },
+                relations: { transportService: true }
+            })
+
+            if (!order) {
+                throw new Error(`Order with ID ${orderId} not found`)
+            }
+
+            const { transportService: { type }, fromAddress, toAddress, fromProvince } = order
+
+            const stopsForOrder = [
+                { routeId, orderId, address: fromAddress, stopType: StopType.PickUp }
+            ]
+
+            if (type === TransportType.Air) {
+                const airportName = provinces.find(p => p.province === fromProvince)?.airport
+                if (airportName) {
+                    stopsForOrder.push({
+                        routeId,
+                        orderId,
+                        address: `${airportName} Airport`,
+                        stopType: StopType.PickUp
+                    })
+                }
+            } else {
+                stopsForOrder.push({
+                    routeId,
+                    orderId,
+                    address: toAddress,
+                    stopType: StopType.Delivery
                 })
             }
-            promises.push(promise())
+
+            await this.routeStopMySqlRepository.save(stopsForOrder)
         }
-        await Promise.all(promises)
+
+        await this.orderMySqlRepository.update(orderIds, {orderStatus: OrderStatus.PendingPickUp})
 
         return {
             message: "New Transportation has been created successfully"
@@ -184,6 +208,15 @@ export class TransportService {
 
         return {
             message: "Delivery Route picked up!, pay attention"
+        }
+    }
+
+    async updateRouteStop (input : UpdateRouteStopStatusInput) : Promise<UpdateRouteStopStatusOutput> {
+        const { data } = input
+        const {} = data
+        
+        return {
+            message: "Route's stop status updated."
         }
     }
 

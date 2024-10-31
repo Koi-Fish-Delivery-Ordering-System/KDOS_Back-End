@@ -32,4 +32,8 @@ export class PickUpDeliveryRouteOutput implements Output{
     message: string
 }
 
+export class UpdateRouteStopStatusOutput implements Output{
+    message: string
+}
+
 

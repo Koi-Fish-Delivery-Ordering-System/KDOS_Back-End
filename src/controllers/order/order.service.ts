@@ -22,7 +22,9 @@ export class OrderService {
         const { data, accountId, files } = input
         const { 
             fromAddress, 
-            toAddress, 
+            toAddress,
+            fromProvince,
+            toProvince, 
             totalPrice, 
             transportServiceId,
             receiverName,
@@ -36,6 +38,8 @@ export class OrderService {
         const { orderId } = await this.orderMySqlRepository.save({
             fromAddress,
             toAddress,
+            fromProvince,
+            toProvince,
             accountId,
             totalPrice,
             transportServiceId,

@@ -45,11 +45,11 @@ export class TransportServiceEntity {
     @Column({ type: "boolean", default: true })
         isActive : boolean
 
-    @Field(() => String)
+    @Field(() => Date)
     @CreateDateColumn()
         createdAt: Date
 
-    @Field(() => String)
+    @Field(() => Date)
     @UpdateDateColumn()
         updatedAt: Date
 

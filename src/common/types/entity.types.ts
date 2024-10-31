@@ -88,3 +88,12 @@ export enum ServicePricingType {
 registerEnumType(ServicePricingType, {
     name: "ServicePricingType",
 })
+
+export enum StopType {
+    PickUp = "pickup",
+    Delivery = "delivery"
+}
+
+registerEnumType(StopType, {
+    name: "StopType",
+})

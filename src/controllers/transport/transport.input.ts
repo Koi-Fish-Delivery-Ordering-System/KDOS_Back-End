@@ -129,8 +129,6 @@ export class UpdateRouteInput implements AuthInput<UpdateRouteInputData> {
 export class CreateRouteStopInputData {
     @ApiProperty()
         orderId : string
-    @ApiProperty()
-        position : number
 }
 
 export class CreateRouteInputData {
@@ -143,4 +141,13 @@ export class CreateRouteInputData {
 export class CreateRouteInput implements AuthInput<CreateRouteInputData> {
     accountId: string
     data: CreateRouteInputData
+}
+
+export class UpdateRouteStopStatusInputData {
+    
+}
+
+export class UpdateRouteStopStatusInput implements AuthInput<UpdateRouteStopStatusInputData> {
+    accountId: string
+    data: UpdateRouteStopStatusInputData
 }

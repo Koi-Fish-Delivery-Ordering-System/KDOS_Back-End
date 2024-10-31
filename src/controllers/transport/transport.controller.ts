@@ -23,7 +23,7 @@ export class TransportController {
     }
 
     @ApiBearerAuth()
-    @Patch("update-additional-service")
+    @Patch("update-transport-service")
     @UseGuards(JwtAuthGuard)
     async updateTransportService(
         @AccountId() accountId: string,

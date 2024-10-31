@@ -53,6 +53,9 @@ export class OrderService {
         const results = await this.orderMySqlRepository.find({
             where:{
                 orderStatus: OrderStatus.Processing
+            },
+            relations:{
+                transportService: true
             }
         })
 

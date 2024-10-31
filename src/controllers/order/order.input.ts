@@ -31,6 +31,10 @@ export class CreateOrderInputData {
         fromAddress: string
     @ApiProperty()
         toAddress: string
+    @ApiProperty()
+        fromProvince: string
+    @ApiProperty()
+        toProvince: string
     @IsUUID()
     @ApiProperty()
         transportServiceId: string

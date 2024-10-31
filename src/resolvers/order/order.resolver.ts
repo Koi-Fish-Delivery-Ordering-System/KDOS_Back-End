@@ -23,4 +23,11 @@ export class OrderResolver {
         return this.orderService.findOneUserOrder({ accountId, data })
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Query(() => [OrderMySqlEntity])
+    async findManyProcessingOrder(
+    ) {
+        return this.orderService.findManyProcessingOrder()
+    }
+
 }

@@ -15,9 +15,11 @@ export class FindManySuitableTransportServiceInput implements Input<FindManySuit
 
 @InputType()
 export class FindManySuitableTransportServiceInputOptions {
-    @Field(() => Int)
+
+    @Field(() => Int, {nullable: true})
         skip? : number
-    @Field(() => Int)
+
+    @Field(() => Int, {nullable : true})
         take? : number
 }
 

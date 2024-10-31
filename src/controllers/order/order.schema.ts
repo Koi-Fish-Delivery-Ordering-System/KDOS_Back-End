@@ -12,6 +12,12 @@ export const createOrderSchema: SchemaObject = {
                 toAddress: {
                     type: "string",
                 },
+                fromProvince: {
+                    type: "string"
+                },
+                toProvince: {
+                    type: "string",
+                },
                 transportServiceId: {
                     type: "string",
                 },
