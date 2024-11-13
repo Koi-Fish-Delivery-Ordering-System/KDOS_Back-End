@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common"
 import { FindManyDriverByProvinceInput, FindOneAccountInput } from "./account.input"
 import { InjectRepository } from "@nestjs/typeorm"
 import { AccountMySqlEntity, DriverMySqlEntity } from "@database"
-import { In, Repository } from "typeorm"
-import { DriverStatus } from "@common"
+import { Repository } from "typeorm"
 
 @Injectable()
 export class AccountsService {
@@ -37,11 +36,13 @@ export class AccountsService {
         const results = await this.driverMySqlRepository.find({
             where:{
                 currentProvince: currentProvince,
-                status: In([DriverStatus.Idle, DriverStatus.Ready])
             }
         })
 
         return results
+    }
 
+    async findAllAccount() : Promise<Array<AccountMySqlEntity>> {
+        return await this.accountMySqlRepository.find({})
     }
 }

@@ -9,7 +9,8 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo"
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default"
 import { join } from "path"
 import { ResolversModule } from "./resolvers"
-import { pathsConfig } from "@config"
+import { jwtConfig, vnpayConfig } from "@config"
+
 
 
 @Module({
@@ -17,7 +18,7 @@ import { pathsConfig } from "@config"
         ConfigModule.forRoot({
             isGlobal: true,
             expandVariables: true,
-            load: [databaseConfig, pathsConfig],
+            load: [databaseConfig, jwtConfig, vnpayConfig],
         }),
         
         GraphQLModule.forRoot<ApolloDriverConfig>({

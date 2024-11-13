@@ -59,16 +59,13 @@ export const createOrderSchema: SchemaObject = {
                             description: {
                                 type: "number",
                             },
+                            fishImageUrl: {
+                                type: "string",
+                            },
                             qualifications : {
                                 type: "array",
                                 items:{
-                                    type: "object",
-                                    properties: {
-                                        mediaIndex : {
-                                            type: "number",
-                                            example : "0"
-                                        }
-                                    }
+                                    type: "string",
                                 }
                             }
                         }
@@ -87,13 +84,6 @@ export const createOrderSchema: SchemaObject = {
                     }
                 }
             },
-        },
-        files: {
-            type: "array",
-            items: {
-                type: "string",
-                format: "binary"
-            },
-        },
+        }
     }
 }

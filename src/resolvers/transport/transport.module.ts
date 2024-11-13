@@ -1,7 +1,7 @@
 
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { AdditionalServiceMySqlEntity, RouteMySqlEntity, TransportServiceMySqlEntity } from "@database"
+import { AdditionalServiceMySqlEntity, DriverMySqlEntity, RouteMySqlEntity, TransportServiceMySqlEntity } from "@database"
 import { TransportResolver } from "./transport.resolver"
 import { TransportService } from "./transport.service"
 
@@ -12,7 +12,8 @@ import { TransportService } from "./transport.service"
         TypeOrmModule.forFeature([
             TransportServiceMySqlEntity,
             AdditionalServiceMySqlEntity,
-            RouteMySqlEntity
+            RouteMySqlEntity,
+            DriverMySqlEntity
         ]),
     ],
     providers: [TransportResolver, TransportService],

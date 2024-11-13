@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from "@nestjs/graphql"
-import { AdditionalServiceMySqlEntity, TransportServiceMySqlEntity } from "@database"
+import { AdditionalServiceMySqlEntity, DriverMySqlEntity, RouteMySqlEntity, TransportServiceMySqlEntity } from "@database"
 import { TransportService } from "./transport.service"
-import { FindAllTransportServiceInputData, FindManySuitableAdditionalServiceInputData, FindManySuitableTransportServiceInputData } from "./transport.input"
+import { FindManySuitableAdditionalServiceInputData, FindManySuitableTransportServiceInputData } from "./transport.input"
 import { AccountId, JwtAuthGuard } from "../shared"
 import { UseGuards } from "@nestjs/common"
 
@@ -16,13 +16,43 @@ export class TransportResolver {
         return this.transportService.findManySuitableTransportService({ data })
     }
 
-    @Query(() => [TransportServiceMySqlEntity])
+    @Query(() => [DriverMySqlEntity])
     @UseGuards(JwtAuthGuard)
-    async findAllTransportService(
-        @AccountId() accountId: string,
-        @Args("data") data: FindAllTransportServiceInputData
+    async findManyAvailableDriver() {
+        return this.transportService.findManyAvailableDriver()
+    }
+
+    @Query(() => [RouteMySqlEntity])
+    @UseGuards(JwtAuthGuard)
+    async findManyRoutes() {
+        return this.transportService.findManyRoutes()
+    }
+
+    @Query(() => [RouteMySqlEntity])
+    @UseGuards(JwtAuthGuard)
+    async findManyAssignedRoute(
+        @AccountId() accountId : string,
     ) {
-        return this.transportService.findAllTransportService({ accountId, data })
+        return this.transportService.findManyAssignedRoute({ accountId })
+    }
+
+    @Query(() => RouteMySqlEntity)
+    @UseGuards(JwtAuthGuard)
+    async findOneDeliveringRoute(
+        @AccountId() accountId : string,
+    ) {
+        return this.transportService.findOneDeliveringRoute({ accountId })
+    }
+
+    @Query(() => [TransportServiceMySqlEntity])
+    async findAllTransportService() {
+        return this.transportService.findAllTransportService()
+    }
+
+    @Query(() => [AdditionalServiceMySqlEntity])
+    @UseGuards(JwtAuthGuard)
+    async findAllAdditionalService() {
+        return this.transportService.findAllAdditionalService()
     }
 
     @Query(() => [AdditionalServiceMySqlEntity])
@@ -33,4 +63,13 @@ export class TransportResolver {
     ) {
         return this.transportService.findManySuitableAdditionalService({ accountId, data })
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Query(() => [RouteMySqlEntity])
+    async findManyCompletedRoute(
+        @AccountId() accountId: string,
+    ) {
+        return this.transportService.findManyCompletedRoute({ accountId })
+    }
+
 }

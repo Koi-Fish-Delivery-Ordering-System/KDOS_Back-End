@@ -1,21 +1,16 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { AccountMySqlEntity, RoleMySqlEntity } from "src/database"
+import { AccountMySqlEntity } from "src/database"
 import { Repository } from "typeorm"
 import { SignInInput, SignUpInput } from "./auth.input"
 import { Sha256Service } from "@global"
 import { SignUpOutput } from "./auth.output"
-import { SystemRoles } from "@common"
-
-
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(AccountMySqlEntity)
         private readonly accountMySqlRepository: Repository<AccountMySqlEntity>,
-        @InjectRepository(RoleMySqlEntity)
-        private readonly roleMySqlRepository: Repository<RoleMySqlEntity>,
         private readonly sha256Service: Sha256Service
     ) { }
 
@@ -32,12 +27,7 @@ export class AuthService {
         const hashedPassword = this.sha256Service.createHash(input.password)
         input.password = hashedPassword
 
-        const { accountId } = await this.accountMySqlRepository.save(input)
-
-        await this.roleMySqlRepository.save({
-            accountId,
-            name: SystemRoles.User
-        })
+        await this.accountMySqlRepository.save(input)
         
         return {
             message: "Your account has been created"

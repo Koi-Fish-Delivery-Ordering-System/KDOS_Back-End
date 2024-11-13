@@ -1,4 +1,4 @@
-import { AuthInput, ParamsOnly, TransportType } from "@common"
+import { AuthInput, RouteStatus, TransportType } from "@common"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsUUID } from "class-validator"
 
@@ -13,6 +13,8 @@ export class CreateTransportServiceInputData {
         pricePerKm: number
     @ApiProperty()
         pricePerKg: number
+    @ApiProperty()
+        pricePerAmount: number
 }
 
 export class CreateTransportServiceInput implements AuthInput<CreateTransportServiceInputData> {
@@ -34,6 +36,8 @@ export class UpdateTransportServiceInputData {
         pricePerKm?: number
     @ApiProperty()
         pricePerKg?: number
+    @ApiProperty()
+        pricePerAmount?: number
 }
 
 export class UpdateTransportServiceInput implements AuthInput<UpdateTransportServiceInputData> {
@@ -77,13 +81,9 @@ export class UpdateAdditionalServiceInput implements AuthInput<UpdateAdditionalS
     data: UpdateAdditionalServiceInputData
 }
 
-export class ToggleAdditionalServiceInputParams {
+export class ToggleAdditionalServiceInputData {
     @ApiProperty()
         additionalServiceId: string
-}
-
-export class ToggleAdditionalServiceInputData implements ParamsOnly<ToggleAdditionalServiceInputParams> {
-    params: ToggleAdditionalServiceInputParams
 }
 
 export class ToggleAdditionalServiceInput implements AuthInput<ToggleAdditionalServiceInputData> {
@@ -91,14 +91,9 @@ export class ToggleAdditionalServiceInput implements AuthInput<ToggleAdditionalS
     data: ToggleAdditionalServiceInputData
 }
 
-
-export class ToggleTransportServiceInputParams {
+export class ToggleTransportServiceInputData {
     @ApiProperty()
         transportServiceId: string
-}
-
-export class ToggleTransportServiceInputData implements ParamsOnly<ToggleTransportServiceInputParams> {
-    params: ToggleTransportServiceInputParams
 }
 
 export class ToggleTransportServiceInput implements AuthInput<ToggleTransportServiceInputData> {
@@ -119,6 +114,10 @@ export class PickUpDeliveryRouteInput implements AuthInput<PickUpDeliveryRouteIn
 export class UpdateRouteInputData {
     @ApiProperty()
         routeId : string
+    @ApiProperty()
+        driverId : string
+    @ApiProperty()
+        addOrderIds : Array<string>
 }
 
 export class UpdateRouteInput implements AuthInput<UpdateRouteInputData> {
@@ -126,16 +125,18 @@ export class UpdateRouteInput implements AuthInput<UpdateRouteInputData> {
     data: UpdateRouteInputData
 }
 
-export class CreateRouteStopInputData {
-    @ApiProperty()
-        orderId : string
-}
+// export class CreateRouteStopInputData {
+//     @ApiProperty()
+//         orderId : string
+// }
 
 export class CreateRouteInputData {
     @ApiProperty()
         driverId : string
     @ApiProperty()
-        routeStops : Array<CreateRouteStopInputData>
+        orderIds : Array<string>
+    @ApiProperty()
+        notes? : string
 }
 
 export class CreateRouteInput implements AuthInput<CreateRouteInputData> {
@@ -144,7 +145,10 @@ export class CreateRouteInput implements AuthInput<CreateRouteInputData> {
 }
 
 export class UpdateRouteStopStatusInputData {
-    
+    @ApiProperty()
+        routeStopId : string
+    @ApiProperty()
+        status : RouteStatus
 }
 
 export class UpdateRouteStopStatusInput implements AuthInput<UpdateRouteStopStatusInputData> {

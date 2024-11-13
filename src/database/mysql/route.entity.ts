@@ -1,11 +1,13 @@
 import { RouteStatus } from "@common"
-import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql"
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { DriverMySqlEntity, RouteStopMySqlEntity } from "."
 
 @ObjectType()
 @Entity("route")
 export class RouteEntity {
+
+    @Field(() => ID)
     @PrimaryGeneratedColumn("uuid")
         routeId: string
 
@@ -17,9 +19,13 @@ export class RouteEntity {
     @Column({ type: "enum", enum: RouteStatus, default: RouteStatus.Pending })
         status: RouteStatus
 
-    @Field(() => Date)
-    @Column({type: "date", nullable: true})
+    @Field(() => Date, {nullable: true})
+    @Column({type: "datetime", nullable: true})
         deliveryStartDate : Date
+
+    @Field(() => String, {nullable: true})
+    @Column({ type: "varchar", length: 5000, nullable: true })
+        notes: string
 
     @Field(() => Date)
     @CreateDateColumn()
@@ -34,7 +40,11 @@ export class RouteEntity {
         routeStops : Array<RouteStopMySqlEntity>
 
     @Field(() => DriverMySqlEntity)
-    @ManyToOne(() => DriverMySqlEntity, (driver) => driver.routes)
+    @ManyToOne(() => DriverMySqlEntity, (driver) => driver.routes, {nullable: true})
     @JoinColumn({name : "driverId"})
         driver : DriverMySqlEntity
+
+    //graphQL
+    @Field(() => Int)
+        numberOfOrders : number
 }

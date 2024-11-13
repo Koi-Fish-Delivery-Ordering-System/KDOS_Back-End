@@ -5,6 +5,8 @@ export class UpdateProfileInputData {
     @ApiProperty()
         username : string
     @ApiProperty()
+        fullName : string
+    @ApiProperty()
         phone : string
     @ApiProperty()
         email : string
@@ -38,4 +40,28 @@ export class RegisterDriverInputData {
 export class RegisterDriverInput implements AuthInput<RegisterDriverInputData>{
     accountId: string
     data: RegisterDriverInputData
+}
+
+export class ChangePasswordInputData {
+    @ApiProperty()
+        oldPassword: string
+    @ApiProperty()
+        newPassword: string
+}
+
+export class ChangePasswordInput implements AuthInput<ChangePasswordInputData>{
+    accountId: string
+    data: ChangePasswordInputData
+}
+
+export class UpdateAccountRoleInputData {
+    @ApiProperty()
+        updateAccountRoleId : string
+    @ApiProperty()
+        roleNames : Array<SystemRoles>
+}
+
+export class UpdateAccountRoleInput implements AuthInput<UpdateAccountRoleInputData>{
+    accountId: string
+    data: UpdateAccountRoleInputData
 }

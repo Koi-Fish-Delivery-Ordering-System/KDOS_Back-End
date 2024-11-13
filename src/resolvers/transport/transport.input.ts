@@ -1,5 +1,5 @@
-import { AuthInput, Input, OptionsOnly, RouteStatus, TransportType } from "@common"
-import { Field, InputType, Int } from "@nestjs/graphql"
+import { AuthEmptyDataInput, AuthInput, Input, TransportType } from "@common"
+import { Field, InputType } from "@nestjs/graphql"
 
 @InputType()
 export class FindManySuitableTransportServiceInputData {
@@ -14,27 +14,6 @@ export class FindManySuitableTransportServiceInput implements Input<FindManySuit
 }
 
 @InputType()
-export class FindManySuitableTransportServiceInputOptions {
-
-    @Field(() => Int, {nullable: true})
-        skip? : number
-
-    @Field(() => Int, {nullable : true})
-        take? : number
-}
-
-@InputType()
-export class FindAllTransportServiceInputData implements OptionsOnly<FindManySuitableTransportServiceInputOptions> {
-    @Field(() => FindManySuitableTransportServiceInputOptions)
-        options: FindManySuitableTransportServiceInputOptions
-} 
-
-export class FindAllTransportServiceInput implements AuthInput<FindAllTransportServiceInputData> {
-    accountId: string
-    data: FindAllTransportServiceInputData
-}
-
-@InputType()
 export class FindManySuitableAdditionalServiceInputData {
     @Field(() => String)
         transportType : TransportType
@@ -45,19 +24,18 @@ export class FindManySuitableAdditionalServiceInput implements AuthInput<FindMan
     data: FindManySuitableAdditionalServiceInputData
 }
 
-@InputType()
-export class FindManyStatusRouteInputOptions {
-    @Field(() => String)
-        status : RouteStatus
-}
-
-@InputType()
-export class FindManyStatusRouteInputData implements OptionsOnly<FindManyStatusRouteInputOptions> {
-    @Field(() => FindManyStatusRouteInputOptions)
-        options: FindManyStatusRouteInputOptions
-}
-
-export class FindManyStatusRouteInput implements AuthInput<FindManyStatusRouteInputData> {
+export class FindManyAssignedRouteInput implements AuthEmptyDataInput{
     accountId: string
-    data: FindManyStatusRouteInputData
+}
+
+export class FindManyAvailableDriverInput implements AuthEmptyDataInput {
+    accountId: string
+}
+
+export class FindOneDeliveringRouteInput implements AuthEmptyDataInput {
+    accountId: string
+}
+
+export class FindManyCompletedRouteInput implements AuthEmptyDataInput {
+    accountId: string
 }

@@ -1,12 +1,11 @@
-import { Body, Controller, Patch, Post, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common"
+import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common"
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger"
 import { OrderService } from "./order.service"
-import { CreateOrderInputData, UpdateOrderInputData } from "./order.input"
+import { CancelOrderInputData, ChangePaymentMethodInputData, CreateOrderFeedBackInputData, CreateOrderInputData, UpdateOrderInputData } from "./order.input"
 import { AccountId, DataFromBody } from "../shared/decorators"
 import { JwtAuthGuard } from "../shared"
-import { FileFieldsInterceptor } from "@nestjs/platform-express"
 import { createOrderSchema } from "./order.schema"
-import { Files } from "@common"
+
 
 @ApiTags("Orders")
 @Controller("api/orders")
@@ -16,23 +15,17 @@ export class OrderController {
     ) { }
 
     @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiConsumes("multipart/form-data")
     @ApiBody({ schema: createOrderSchema })
     @Post("create-order")
-    @UseGuards(JwtAuthGuard)
-    @UseInterceptors(
-        FileFieldsInterceptor([{ name: "files" }]),
-    )
     async createOrder(
         @AccountId() accountId: string,
         @DataFromBody() data: CreateOrderInputData,
-        @UploadedFiles() { files }: Files,
     ) {
-        console.log(files ?? "deo co")
         return this.orderService.createOrder({
             accountId,
             data,
-            files,
         })
     }
 
@@ -43,5 +36,35 @@ export class OrderController {
         @Body() data: UpdateOrderInputData
     ) {
         return await this.orderService.updateOrder({ accountId, data })
+    }
+
+    @ApiBearerAuth()
+    @Patch("create-order-feedback")
+    @UseGuards(JwtAuthGuard)
+    async createOrderFeedBack(
+        @AccountId() accountId: string,
+        @Body() data: CreateOrderFeedBackInputData
+    ) {
+        return await this.orderService.createOrderFeedBack({ accountId, data })
+    }
+
+    @ApiBearerAuth()
+    @Patch("cancel-order")
+    @UseGuards(JwtAuthGuard)
+    async cancelOrder(
+        @AccountId() accountId: string,
+        @Body() data: CancelOrderInputData
+    ) {
+        return await this.orderService.cancelOrder({ accountId, data })
+    }
+
+    @ApiBearerAuth()
+    @Patch("change-payment-method")
+    @UseGuards(JwtAuthGuard)
+    async changePaymentMethod(
+        @AccountId() accountId: string,
+        @Body() data: ChangePaymentMethodInputData
+    ) {
+        return await this.orderService.changePaymentMethod({ accountId, data })
     }
 }

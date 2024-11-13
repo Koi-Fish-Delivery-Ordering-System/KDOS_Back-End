@@ -1,7 +1,7 @@
 import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common"
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger"
 import { TransportService } from "./transport.service"
-import { CreateAdditionalServiceInputData, CreateTransportServiceInput, ToggleAdditionalServiceInputData, ToggleTransportServiceInputData, UpdateAdditionalServiceInputData, UpdateTransportServiceInputData } from "./transport.input"
+import { CreateAdditionalServiceInputData, CreateRouteInputData, CreateTransportServiceInputData, PickUpDeliveryRouteInputData, ToggleAdditionalServiceInputData, ToggleTransportServiceInputData, UpdateAdditionalServiceInputData, UpdateRouteStopStatusInputData, UpdateTransportServiceInputData } from "./transport.input"
 import { AccountId, JwtAuthGuard } from "../shared"
 
 
@@ -14,12 +14,13 @@ export class TransportController {
     ) { }
 
     @ApiBearerAuth()
-    @Post("create-transport")
+    @Post("create-transport-service")
     @UseGuards(JwtAuthGuard)
     async createTransportService(
-        @Body() data: CreateTransportServiceInput
+        @AccountId() accountId : string,
+        @Body() data: CreateTransportServiceInputData
     ){
-        return await this.transportService.createTransportService(data)
+        return await this.transportService.createTransportService({ accountId, data })
     }
 
     @ApiBearerAuth()
@@ -71,4 +72,35 @@ export class TransportController {
     ){
         return await this.transportService.toggleAdditionalService({accountId, data})
     }
+
+    @ApiBearerAuth()
+    @Post("create-route")
+    @UseGuards(JwtAuthGuard)
+    async createRoute(
+        @AccountId() accountId: string,
+        @Body() data: CreateRouteInputData
+    ){
+        return await this.transportService.createRoute({accountId, data})
+    }
+
+    @ApiBearerAuth()
+    @Patch("pick-up-delivery-route")
+    @UseGuards(JwtAuthGuard)
+    async pickUpDeliveryRoute(
+        @AccountId() accountId: string,
+        @Body() data: PickUpDeliveryRouteInputData
+    ){
+        return await this.transportService.pickUpDeliveryRoute({ accountId, data })
+    }
+
+    @ApiBearerAuth()
+    @Patch("update-route-stop-status")
+    @UseGuards(JwtAuthGuard)
+    async updateRouteStopStatus(
+        @AccountId() accountId: string,
+        @Body() data: UpdateRouteStopStatusInputData
+    ){
+        return await this.transportService.updateRouteStopStatus({ accountId, data })
+    }
+    
 }

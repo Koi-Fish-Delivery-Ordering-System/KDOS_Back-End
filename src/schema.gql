@@ -7,14 +7,17 @@ type AccountEntity {
   address: String
   createdAt: DateTime!
   driver: DriverEntity
+  driverId: ID!
   email: String!
+  fullName: String!
   orders: [OrderEntity!]!
   password: String!
   phone: String!
-  roles: [RoleEntity!]
+  role: String!
+  transactions: [TransactionEntity!]
   updatedAt: DateTime!
   username: String!
-  verified: Boolean!
+  walletAmount: Float!
 }
 
 type AdditionalServiceEntity {
@@ -44,10 +47,6 @@ type DriverEntity {
   updatedAt: DateTime!
 }
 
-input FindAllTransportServiceInputData {
-  options: FindManySuitableTransportServiceInputOptions!
-}
-
 input FindManySuitableAdditionalServiceInputData {
   transportType: String!
 }
@@ -55,11 +54,6 @@ input FindManySuitableAdditionalServiceInputData {
 input FindManySuitableTransportServiceInputData {
   fromProvince: String!
   toProvince: String!
-}
-
-input FindManySuitableTransportServiceInputOptions {
-  skip: Int
-  take: Int
 }
 
 input FindOneUserOrderInputData {
@@ -70,26 +64,21 @@ input FindOneUserOrderInputParams {
   orderId: String!
 }
 
-type FishHealthEntity {
-  apperance: String!
-  behavior: String!
-  chechUpNote: String!
-  checkedUpAt: DateTime!
-  color: String!
-  createdAt: DateTime!
-  fish: OrderFishEntity
-  fishHealthId: ID!
-  temperature: String!
-  waterQuality: String!
-}
-
 type FishQualificationEntity {
   createdAt: DateTime!
-  fileId: ID!
   fish: OrderFishEntity!
   fishId: ID!
   fishQualificationId: ID!
+  imageUrl: String!
   updatedAt: DateTime!
+}
+
+type InitReportOutput {
+  averageOrderRating: Float!
+  numberOfDrivers: Int!
+  numberOfOrders: Int!
+  numberOfTransportServices: Int!
+  totalRevenue: Float!
 }
 
 type OrderAdditionalServiceEntity {
@@ -106,13 +95,17 @@ type OrderEntity {
   account: AccountEntity!
   accountId: ID!
   createdAt: DateTime!
+  feedBackContent: String
+  feedBackStars: Float
   fromAddress: String!
   fromProvince: String!
+  hasCompletedFirstDelivery: Boolean
   notes: String
   orderId: ID!
   orderStatus: String!
   orderedFish: [OrderFishEntity!]
   paymentMethod: String!
+  reasonToCancel: String
   receiverName: String!
   receiverPhone: String!
   routeStops: [RouteStopEntity!]
@@ -121,6 +114,7 @@ type OrderEntity {
   toAddress: String!
   toProvince: String!
   totalPrice: Float!
+  transactions: [TransactionEntity!]
   transportService: TransportServiceEntity!
   transportServiceId: ID!
   updatedAt: DateTime!
@@ -130,8 +124,8 @@ type OrderFishEntity {
   ageInMonth: Float!
   createdAt: DateTime!
   description: String
+  fishImageUrl: String
   gender: String!
-  health: FishHealthEntity!
   length: Float!
   name: String
   order: OrderEntity!
@@ -144,31 +138,34 @@ type OrderFishEntity {
 }
 
 type Query {
-  findAllTransportService(data: FindAllTransportServiceInputData!): [TransportServiceEntity!]!
+  findAllAccount: [AccountEntity!]!
+  findAllAdditionalService: [AdditionalServiceEntity!]!
+  findAllOrder: [OrderEntity!]!
+  findAllTransportService: [TransportServiceEntity!]!
+  findManyAssignedRoute: [RouteEntity!]!
+  findManyAvailableDriver: [DriverEntity!]!
+  findManyCompletedRoute: [RouteEntity!]!
   findManyProcessingOrder: [OrderEntity!]!
+  findManyRoutes: [RouteEntity!]!
   findManySuitableAdditionalService(data: FindManySuitableAdditionalServiceInputData!): [AdditionalServiceEntity!]!
   findManySuitableTransportService(data: FindManySuitableTransportServiceInputData!): [TransportServiceEntity!]!
+  findManyTransaction: [TransactionEntity!]!
   findManyUserOrder: [OrderEntity!]!
   findOneAccount: AccountEntity!
+  findOneDeliveringRoute: RouteEntity!
   findOneUserOrder(data: FindOneUserOrderInputData!): [OrderEntity!]!
   init: AccountEntity!
-}
-
-type RoleEntity {
-  accountId: ID!
-  accountRoles: AccountEntity!
-  createdAt: DateTime!
-  isDisabled: Boolean!
-  name: String!
-  roleId: ID!
-  updatedAt: DateTime!
+  initReport: InitReportOutput!
 }
 
 type RouteEntity {
   createdAt: DateTime!
-  deliveryStartDate: DateTime!
+  deliveryStartDate: DateTime
   driver: DriverEntity!
   driverId: ID!
+  notes: String
+  numberOfOrders: Int!
+  routeId: ID!
   routeStops: [RouteStopEntity!]
   status: String!
   updatedAt: DateTime!
@@ -184,6 +181,19 @@ type RouteStopEntity {
   routeStopId: ID!
   status: String!
   stopType: String!
+  updatedAt: DateTime!
+}
+
+type TransactionEntity {
+  account: AccountEntity!
+  accountId: String!
+  amount: Float!
+  createdAt: DateTime!
+  order: OrderEntity!
+  orderId: String
+  status: String!
+  transactionId: ID!
+  type: String!
   updatedAt: DateTime!
 }
 

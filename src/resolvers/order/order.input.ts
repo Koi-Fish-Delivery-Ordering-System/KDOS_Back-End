@@ -23,6 +23,3 @@ export class FindOneUserOrderInput implements AuthInput<FindOneUserOrderInputDat
     data: FindOneUserOrderInputData
 }
 
-// export class FindManyPendingOrderInput implements AuthEmptyDataInput {
-//     accountId: string
-// }

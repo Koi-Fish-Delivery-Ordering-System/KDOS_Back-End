@@ -30,4 +30,9 @@ export class OrderResolver {
         return this.orderService.findManyProcessingOrder()
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Query(() => [OrderMySqlEntity])
+    async findAllOrder() {
+        return this.orderService.findAllOrder()
+    }
 }

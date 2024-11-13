@@ -21,9 +21,9 @@ export class FishQualificationEntity {
     @Column({ type: "uuid", length: 36 })
         fishId: string
 
-    @Field(() => ID)
-    @Column({ type: "uuid", length: 36 })
-        fileId: string
+    @Field(() => String)
+    @Column({ type: "uuid", length: 500 })
+        imageUrl: string
 
     @Field(() => Date)
     @CreateDateColumn()

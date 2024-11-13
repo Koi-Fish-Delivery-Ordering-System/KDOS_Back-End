@@ -2,18 +2,19 @@ import { Global, Module } from "@nestjs/common"
 import {
     AuthManagerService,
     Sha256Service,
-    StorageService} from "./services"
+    VnpayService,
+} from "./services"
 import { JwtService } from "@nestjs/jwt"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { RoleMySqlEntity } from "@database"
 import { JwtStrategy } from "./strategies"
+import { AccountMySqlEntity } from "@database"
 
 
 @Global()
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            RoleMySqlEntity
+            AccountMySqlEntity
         ])
     ],
     exports: [
@@ -21,14 +22,14 @@ import { JwtStrategy } from "./strategies"
         JwtStrategy,
         AuthManagerService,
         Sha256Service,
-        StorageService
+        VnpayService
     ],
     providers: [
         JwtService,
         JwtStrategy,
         AuthManagerService,
         Sha256Service,
-        StorageService
+        VnpayService
     ], 
 })
 export class GlobalModule { }

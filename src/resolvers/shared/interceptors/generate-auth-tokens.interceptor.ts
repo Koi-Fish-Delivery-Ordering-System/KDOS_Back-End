@@ -24,7 +24,7 @@ implements NestInterceptor<T, AuthOutput<T>>
                 const { tokens } = await this.authManagerService.generateOutput<T>(
                     {
                         accountId: data.accountId,
-                        accountRoles: data.roles,
+                        accountRole: data.role,
                     },
                     data,
                     true,

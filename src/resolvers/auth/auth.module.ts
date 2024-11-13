@@ -1,6 +1,7 @@
 import {
     AccountMySqlEntity,
-    RoleMySqlEntity,
+    OrderMySqlEntity,
+    TransportServiceMySqlEntity,
 } from "@database"
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -11,7 +12,8 @@ import { AuthService } from "./auth.service"
     imports: [
         TypeOrmModule.forFeature([
             AccountMySqlEntity,
-            RoleMySqlEntity,
+            OrderMySqlEntity,
+            TransportServiceMySqlEntity
         ]),
     ],
     providers: [AuthResolver, AuthService],

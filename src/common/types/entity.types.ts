@@ -1,10 +1,9 @@
 import { registerEnumType } from "@nestjs/graphql"
 
 export enum SystemRoles {
-    User = "user",
+    Customer = "customer",
     Delivery = "delivery",
-    Manager = "manager",
-    HealthCare = "healthcare",
+    Manager = "manager"
 }
 
 registerEnumType(SystemRoles, {
@@ -31,7 +30,6 @@ registerEnumType(TransportType, {
 
 export enum DriverStatus {
     Ready = "ready",
-    Idle = "idle",
     Delivering = "delivering"
 }
 
@@ -52,7 +50,8 @@ registerEnumType(DeliveryStatus, {
 
 export enum PaymentMethod {
     Cash = "cash",
-    Banking = "banking"
+    Wallet = "wallet",
+    Vnpay = "vnpay"
 }
 
 registerEnumType(PaymentMethod, {
@@ -60,10 +59,12 @@ registerEnumType(PaymentMethod, {
 })
 
 export enum OrderStatus {
+    UnCompleted = "uncompleted",
     Processing = "processing",
     PendingPickUp = "pendingPickUp",
     Delivering = "delivering",
-    Delivered = "delivered"
+    Completed = "completed",
+    Canceled = "canceled"
 }
 
 registerEnumType(OrderStatus, {
@@ -71,13 +72,13 @@ registerEnumType(OrderStatus, {
 })
 
 export enum RouteStatus {
-    Pending = "Pending",
-    Delivering = "Delivering",
-    Delivered = "Completed"
+    Pending = "pending",
+    Delivering = "delivering",
+    Completed = "completed"
 }
 
 registerEnumType(RouteStatus, {
-    name: "OrderStatus",
+    name: "RouteStatus",
 })
 
 export enum ServicePricingType {
@@ -97,3 +98,25 @@ export enum StopType {
 registerEnumType(StopType, {
     name: "StopType",
 })
+
+export enum TransactionType {
+    TopUp = "topUp",
+    Pay = "pay",
+    UseWallet = "useWallet",
+    Refund = "refund"
+}
+
+registerEnumType(StopType, {
+    name: "StopType",
+})
+
+export enum TransactionStatus {
+    NotCompleted = "notCompleted",
+    Failed = "failed",
+    Success = "success"
+}
+
+registerEnumType(TransactionStatus, {
+    name: "PaymentStatus",
+})
+

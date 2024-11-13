@@ -3,6 +3,7 @@ import { Query, Resolver } from "@nestjs/graphql"
 import { AccountId, JwtAuthGuard } from "../shared"
 import { AuthService } from "./auth.service"
 import { AccountMySqlEntity } from "@database"
+import { InitReportOutput } from "./auth.output"
 
 @Resolver()
 export class AuthResolver {
@@ -14,4 +15,9 @@ export class AuthResolver {
         return this.authService.init({ accountId })
     }
 
+  @UseGuards(JwtAuthGuard)
+  @Query(() => InitReportOutput)
+  async initReport() {
+      return this.authService.initReport()
+  }
 }

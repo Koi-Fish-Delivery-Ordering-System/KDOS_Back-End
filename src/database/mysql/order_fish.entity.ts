@@ -7,11 +7,10 @@ import {
     JoinColumn,
     ManyToOne,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm"
-import { FishHealthEntity } from "./fish_health.entity"
+
 import { FishQualificationEntity } from "./fish_qualifications.entity"
 import { OrderEntity } from "./order.entity"
 
@@ -55,6 +54,10 @@ export class OrderFishEntity {
     @Column({ type: "varchar", length: 2000, nullable: true })
         description: string
 
+    @Field(() => String, { nullable: true })
+    @Column({ type: "varchar", length: 500, nullable: true })
+        fishImageUrl: string
+
     @Field(() => [FishQualificationEntity], { nullable: true })
     @OneToMany(() => FishQualificationEntity, (qualification) => qualification.fish, { nullable: true })
         qualifications: Array<FishQualificationEntity>
@@ -66,11 +69,6 @@ export class OrderFishEntity {
     @Field(() => Date)
     @UpdateDateColumn()
         updatedAt: Date
-
-    @Field(() => FishHealthEntity)
-    @OneToOne(() => FishHealthEntity, (health) => health.fishHealthId, { nullable: true, onDelete: "CASCADE" })
-    @JoinColumn({ name: "healthId" })
-        health: FishHealthEntity
 
     @Field(() => OrderEntity)
     @ManyToOne(() => OrderEntity, (order) => order.orderedFish, {onDelete: "CASCADE"})

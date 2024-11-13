@@ -7,3 +7,13 @@ export class UpdateProfileOutput implements Output {
 export class RegisterDriverOutput implements Output {
     message: string
 }
+
+export class ChangePasswordOutput implements Output {
+    message: string
+}
+
+export class UpdateAccountRoleOutput implements Output {
+    message: string
+}
+
+

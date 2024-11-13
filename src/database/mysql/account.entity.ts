@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Field, Float, ID, ObjectType } from "@nestjs/graphql"
 import {
     Column,
     CreateDateColumn,
@@ -9,9 +9,10 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm"
-import { RoleEntity } from "./role.entity"
+
 import { OrderEntity } from "./order.entity"
-import { DriverMySqlEntity } from "."
+import { DriverMySqlEntity, TransactionMySqlEntity } from "."
+import { SystemRoles } from "@common"
 
 //tạo bảng dưới dạng code
 // Object type, Field => GraphQL ko thêm thì vẫn tạo đc bảng nhưng graphQL ko hiểu => ko truy vấn được
@@ -35,6 +36,10 @@ export class AccountEntity {
         password: string
 
     @Field(() => String)
+    @Column({ type: "varchar", length: 50 })
+        fullName: string
+
+    @Field(() => String)
     @Column({ type: String, length: 50, unique: true })
         email: string
 
@@ -42,13 +47,17 @@ export class AccountEntity {
     @Column({ type: String, length: 12, nullable: true })
         phone: string
 
-    @Field(() => String, {nullable: true})
+    @Field(() => String, { nullable: true })
     @Column({ type: String, length: 1000, nullable: true })
         address: string
 
-    @Field(() => Boolean)
-    @Column({ type: "boolean", default: false })
-        verified: boolean
+    @Field(() => ID)
+    @Column({ type: "varchar", length: 36, nullable: true })
+        driverId: string
+
+    @Field(() => Float)
+    @Column({ type: "float", default: 1 })
+        walletAmount: number
 
     @Field(() => Date)
     @CreateDateColumn()
@@ -58,13 +67,9 @@ export class AccountEntity {
     @UpdateDateColumn()
         updatedAt: Date
 
-    @Field(() => [RoleEntity], { nullable: true })
-
-    @OneToMany(
-        () => RoleEntity,
-        (role) => role.accountRoles,
-    )
-        roles: Array<RoleEntity>
+    @Field(() => String)
+    @Column({ type: "enum", enum: SystemRoles, default: SystemRoles.Customer})
+        role: SystemRoles
 
     @Field(() => [OrderEntity])
     @OneToMany(() => OrderEntity, (order) => order.account)
@@ -78,5 +83,9 @@ export class AccountEntity {
     )
     @JoinColumn({ name: "driverId" })
         driver: DriverMySqlEntity
+
+    @Field(() => [TransactionMySqlEntity], { nullable: true })
+    @OneToMany(() => TransactionMySqlEntity, (transactions) => transactions.account)
+        transactions: Array<TransactionMySqlEntity>
 
 }

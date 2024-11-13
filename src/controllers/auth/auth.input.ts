@@ -15,15 +15,19 @@ export class SignUpInput {
         email: string
 
     @MinLength(8)
-    @ApiProperty({ example: "Cuong123_A", description: "Password" })
+    @ApiProperty({ description: "Password" })
         password: string
-        
+
     @IsNotEmpty()
-    @ApiProperty({ example: "sample123", description: "User's Name" })
+    @ApiProperty({ example: "sample123", description: "User Login Name" })
         username: string
 
     @IsNotEmpty()
-    @ApiProperty({example: "84903304720", description: "User's Phone Number"})
-        phone : string
+    @ApiProperty({ example: "sample123", description: "User's Full Name" })
+        fullName: string
+
+    @IsNotEmpty()
+    @ApiProperty({ example: "84903304720", description: "User's Phone Number" })
+        phone: string
 
 }

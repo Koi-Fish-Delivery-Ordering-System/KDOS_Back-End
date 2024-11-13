@@ -41,6 +41,7 @@ export class RouteStopEntity {
 
     @Field(() => RouteMySqlEntity)
     @ManyToOne(() => RouteMySqlEntity, (route) => route.routeStops, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "routeId" })
         route: RouteMySqlEntity
 
     @Field(() => OrderMySqlEntity)

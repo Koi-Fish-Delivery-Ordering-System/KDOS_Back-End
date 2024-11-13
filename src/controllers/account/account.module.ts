@@ -1,7 +1,7 @@
 
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { AccountMySqlEntity, DriverMySqlEntity, OrderMySqlEntity, RoleMySqlEntity } from "@database"
+import { AccountMySqlEntity, DriverMySqlEntity, OrderMySqlEntity } from "@database"
 import { AccountsController } from "./account.controller"
 import { AccountsService } from "./account.service"
 
@@ -9,7 +9,6 @@ import { AccountsService } from "./account.service"
     imports: [
         TypeOrmModule.forFeature([
             AccountMySqlEntity,
-            RoleMySqlEntity,
             OrderMySqlEntity,
             DriverMySqlEntity
         ]),

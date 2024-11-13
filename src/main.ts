@@ -11,6 +11,7 @@ const createDatabase = async () => {
         port: databaseConfig().mysql.port,
         username: databaseConfig().mysql.username,
         password: databaseConfig().mysql.password,
+        logging: true
     })
 
     const promises: Array<Promise<void>> = []

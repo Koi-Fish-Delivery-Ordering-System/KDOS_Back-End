@@ -17,4 +17,9 @@ export class AccountsResolver {
         return this.accountsService.findOneAccount(data)
     }
 
+    @Query(() => [AccountMySqlEntity])
+    async findAllAccount() {
+        return this.accountsService.findAllAccount()
+    }
+
 }

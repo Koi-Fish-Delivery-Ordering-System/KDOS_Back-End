@@ -1,11 +1,6 @@
 import { AuthInput, FishGender, PaymentMethod, ServicePricingType } from "@common"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsUUID } from "class-validator"
-
-export class AddFishQualificationInputData {
-    @ApiProperty()
-        mediaIndex : number
-}
+import { IsUUID, Max, Min } from "class-validator"
 
 export class AddFishInputData {
     @ApiProperty()
@@ -21,9 +16,11 @@ export class AddFishInputData {
     @ApiProperty()
         length : number
     @ApiProperty()
-        description : string
+        description? : string
     @ApiProperty()
-        qualifications : Array<AddFishQualificationInputData>
+        qualifications : Array<string>
+    @ApiProperty()
+        fishImageUrl : string
 }
 
 export class CreateOrderInputData {
@@ -59,7 +56,6 @@ export class CreateOrderInputData {
 export class CreateOrderInput implements AuthInput<CreateOrderInputData> {
     accountId: string
     data: CreateOrderInputData
-    files: Express.Multer.File[]
 }
 
 export class UpdateOrderInputData {
@@ -83,4 +79,44 @@ export class UpdateOrderInputData {
 export class UpdateOrderInput implements AuthInput<UpdateOrderInputData> {
     accountId: string
     data: UpdateOrderInputData
+}
+
+export class CreateOrderFeedBackInputData {
+    @ApiProperty()
+        orderId: string
+    @ApiProperty()
+    @Min(1)
+    @Max(5)
+        feedBackStars : number
+    @ApiProperty()
+        feedBackContent : string
+}
+
+export class CreateOrderFeedBackInput implements AuthInput<CreateOrderFeedBackInputData> {
+    accountId: string
+    data: CreateOrderFeedBackInputData
+}
+
+export class CancelOrderInputData {
+    @ApiProperty()
+        orderId : string
+    @ApiProperty()
+        reasonToCancel? : string
+}
+
+export class CancelOrderInput implements AuthInput<CancelOrderInputData> {
+    accountId: string
+    data: CancelOrderInputData
+}
+
+export class ChangePaymentMethodInputData {
+    @ApiProperty()
+        orderId : string
+    @ApiProperty()
+        paymentMethod : PaymentMethod
+}
+
+export class ChangePaymentMethodInput implements AuthInput<ChangePaymentMethodInputData> {
+    accountId: string
+    data: ChangePaymentMethodInputData
 }

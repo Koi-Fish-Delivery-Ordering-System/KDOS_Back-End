@@ -8,12 +8,10 @@ export interface AuthOutput<T> {
 export interface AuthInput<T> {
     accountId: string,
     data: T,
-    files?: Array<Express.Multer.File>
 }
 
 export interface Input<T> {
     data: T,
-    files?: Array<Express.Multer.File>
 }
 
 export interface Output<T = undefined> {
@@ -23,7 +21,6 @@ export interface Output<T = undefined> {
 
 export interface AuthEmptyDataInput {
     accountId: string,
-    files?: Array<Express.Multer.File>
 }
 
 export interface ParamsWithOptions<T, K> {
